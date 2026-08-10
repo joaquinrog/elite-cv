@@ -9,7 +9,7 @@
     "data/profile.yml": "af8fbc5e4140efbdc1ebbcdc6bc89e57c59bbdf3464fd578d232505aa861b14c",
     "data/variants/ai-internship.yml": "965e4f2785df6da02b5fecc49444010614e3ead59f708035056768afa115cc6d"
   },
-  "built_at": "2026-08-10T13:46:56.543571+00:00",
+  "built_at": "2026-08-10T21:55:41.553303+00:00",
   "tools": {
     "python3": "Python 3.12.3",
     "latexmk": "Latexmk, John Collins, 31 Jan. 2024. Version 4.83",

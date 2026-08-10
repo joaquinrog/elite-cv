@@ -1,6 +1,6 @@
 # Synthetic robotics portfolio notes
 
-This is a fictional source created for the Elite CV public walkthrough. It is
+This is a fictional source created for the Elite CV Builder public walkthrough. It is
 not a real person's resume, employer record, or performance report.
 
 ## Control software

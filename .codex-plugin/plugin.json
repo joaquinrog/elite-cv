@@ -1,0 +1,21 @@
+{
+  "name": "elite-cv-builder",
+  "version": "0.1.0",
+  "description": "Local-first, evidence-backed CV and resume workflows for AI agents.",
+  "author": {
+    "name": "joaq",
+    "url": "https://github.com/joaquinrog"
+  },
+  "homepage": "https://github.com/joaquinrog/elite-cv",
+  "repository": "https://github.com/joaquinrog/elite-cv",
+  "license": "MIT",
+  "keywords": [
+    "cv",
+    "resume",
+    "career",
+    "evidence",
+    "privacy",
+    "local-first"
+  ],
+  "skills": "./skills/"
+}

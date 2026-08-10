@@ -13,7 +13,11 @@ license or attribution requirement.
 
 ## Name
 
-The working product name is **Elite CV** and the Python command is `elitecv`,
-matching the execution plan. Repository, package, and domain availability still
-require an external availability check before a public launch. This document
-does not claim that those names are available or legally cleared.
+The public alpha name is **Elite CV Builder by joaq**. The Python command
+remains `elitecv`, and the intended distribution identifier is
+`elite-cv-builder`. This is a descriptive alpha name chosen for discovery, not
+a claim of trademark or domain availability. It is an independent project and
+is not affiliated with similarly named services.
+
+Complete a professional name, trademark, and domain review before commercial
+use or a broad paid launch.

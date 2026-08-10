@@ -1,11 +1,14 @@
 from pathlib import Path
+import os
 import shutil
+import stat
 import subprocess
 
 import pytest
 import yaml
 
 from elitecv.build import BuildError, _run, build_variant
+from elitecv.cli import main
 
 
 SAMPLE_ROOT = Path(__file__).parents[2] / "examples" / "synthetic-profile"
@@ -32,6 +35,34 @@ def test_synthetic_variant_build_produces_share_and_private_outputs(tmp_path):
     report = result.evidence_report_path.read_text(encoding="utf-8")
     assert "35 percent faster" not in report
     assert "raw source excerpts" in report
+
+
+@pytest.mark.skipif(
+    os.name != "posix" or any(shutil.which(tool) is None for tool in REQUIRED_TOOLS),
+    reason="POSIX permissions or the local PDF toolchain are unavailable",
+)
+def test_synthetic_variant_build_uses_owner_only_output_permissions(tmp_path):
+    result = build_variant(SAMPLE_ROOT, "robotics-software", output_dir=tmp_path / "output")
+
+    for path in result.output_dir.rglob("*"):
+        expected_mode = 0o700 if path.is_dir() else 0o600
+        assert stat.S_IMODE(path.stat().st_mode) == expected_mode
+
+
+@pytest.mark.skipif(
+    os.name != "posix" or any(shutil.which(tool) is None for tool in REQUIRED_TOOLS),
+    reason="POSIX permissions or the local PDF toolchain are unavailable",
+)
+def test_release_uses_owner_only_output_permissions(tmp_path):
+    workspace = tmp_path / "workspace"
+    shutil.copytree(SAMPLE_ROOT, workspace)
+
+    assert main(["release", "robotics-software", "--root", str(workspace), "--acknowledge-visual-review"]) == 0
+
+    release_dir = workspace / "dist" / "robotics-software" / "release"
+    for path in release_dir.rglob("*"):
+        expected_mode = 0o700 if path.is_dir() else 0o600
+        assert stat.S_IMODE(path.stat().st_mode) == expected_mode
 
 
 def test_strict_build_rejects_a_bullet_with_a_missing_claim(tmp_path):

@@ -32,19 +32,23 @@ def test_init_opt_in_removes_structured_data_from_local_ignore_block(tmp_path):
 
 def test_variant_create_rejects_a_path_traversal_id(tmp_path):
     _init(tmp_path, "General", "letter")
-    template = tmp_path / "data" / "variants" / "robotics-software.yml"
-    template.write_text(
-        "schema_version: 1\nid: robotics-software\ntarget_role: General\n"
-        "locale: en-US\npage_size: letter\npage_target: 1\nsections: []\n"
-        "include_entries: []\nexclude_entries: []\nrequired_claim_ids: []\n"
-        "allowed_disclosures: [shareable]\n",
-        encoding="utf-8",
-    )
 
     result = main(["variant", "create", "../escaped", "--root", str(tmp_path)])
 
     assert result == 1
     assert not (tmp_path / "data" / "escaped.yml").exists()
+
+
+def test_variant_create_copies_the_initialized_general_variant(tmp_path):
+    _init(tmp_path, "General Technical Role", "letter")
+
+    result = main(["variant", "create", "data-engineer", "--root", str(tmp_path)])
+
+    created = tmp_path / "data" / "variants" / "data-engineer.yml"
+    assert result == 0
+    assert "id: data-engineer" in created.read_text(encoding="utf-8")
+    if os.name == "posix":
+        assert stat.S_IMODE(created.stat().st_mode) == 0o600
 
 
 def test_workspace_loader_rejects_a_path_traversal_target():
@@ -113,3 +117,15 @@ def test_doctor_reports_a_timed_out_latex_lookup(monkeypatch, tmp_path):
     monkeypatch.setattr("elitecv.cli.subprocess.run", timeout)
 
     assert _doctor(tmp_path) == 1
+
+
+def test_doctor_uses_the_public_product_name(monkeypatch, tmp_path, capsys):
+    monkeypatch.setattr("elitecv.cli.shutil.which", lambda _tool: "/usr/bin/tool")
+    monkeypatch.setattr(
+        "elitecv.cli.subprocess.run",
+        lambda *_args, **_kwargs: subprocess.CompletedProcess([], 0),
+    )
+
+    assert _doctor(tmp_path) == 0
+
+    assert capsys.readouterr().out.startswith("Elite CV Builder by joaq 0.1.0 doctor:")

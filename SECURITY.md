@@ -1,6 +1,6 @@
 # Security
 
-Elite CV is local-first but not automatically safe. A private Git repository
+Elite CV Builder is local-first but not automatically safe. A private Git repository
 can still expose data through access settings, history, hosted agents, logs,
 artifacts, or copied reports.
 

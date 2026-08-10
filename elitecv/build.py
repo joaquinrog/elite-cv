@@ -4,6 +4,7 @@ from dataclasses import dataclass
 from datetime import datetime, timezone
 import hashlib
 import json
+import os
 from pathlib import Path
 import shutil
 import subprocess
@@ -146,6 +147,20 @@ def _tools_used() -> dict[str, str]:
     }
 
 
+def _private_directory(path: Path) -> None:
+    path.mkdir(parents=True, exist_ok=True, mode=0o700)
+    if os.name == "posix":
+        path.chmod(0o700)
+
+
+def _restrict_private_tree(root: Path) -> None:
+    if os.name != "posix":
+        return
+    root.chmod(0o700)
+    for path in root.rglob("*"):
+        path.chmod(0o700 if path.is_dir() else 0o600)
+
+
 def build_variant(
     root: Path,
     target: str,
@@ -182,8 +197,10 @@ def build_variant(
     share_dir = target_dir / "share"
     private_dir = target_dir / "private"
     build_dir = private_dir / "build"
-    share_dir.mkdir(parents=True)
-    build_dir.mkdir(parents=True)
+    _private_directory(target_dir)
+    _private_directory(share_dir)
+    _private_directory(private_dir)
+    _private_directory(build_dir)
 
     tex_path = build_dir / "cv.tex"
     tex_path.write_text(render_latex(documents, validation), encoding="utf-8")
@@ -243,6 +260,7 @@ def build_variant(
         },
     }
     manifest_path.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
+    _restrict_private_tree(target_dir)
     return BuildResult(
         target=target,
         output_dir=target_dir,

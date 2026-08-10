@@ -1,6 +1,6 @@
-# Elite CV Agent Instructions
+# Elite CV Builder by joaq Agent Instructions
 
-Elite CV is a local-first, provenance-aware CV workspace. Read the relevant
+Elite CV Builder is a local-first, provenance-aware CV workspace. Read the relevant
 files under `docs/` before editing structured data.
 
 ## Non-negotiable rules

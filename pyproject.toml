@@ -3,19 +3,25 @@ requires = ["setuptools>=68,<85"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "elitecv"
+name = "elite-cv-builder"
 version = "0.1.0"
-description = "A Git-native CV system with inspectable claim provenance"
+description = "A local-first, evidence-backed CV and resume builder for AI agents"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = ["PyYAML>=6.0.3,<7"]
 license = "MIT"
 license-files = ["LICENSE"]
-authors = [{name = "Elite CV contributors"}]
+authors = [{name = "joaq"}]
+keywords = ["ai-agents", "cv", "evidence", "local-first", "privacy", "resume"]
 classifiers = [
   "Development Status :: 3 - Alpha",
   "Programming Language :: Python :: 3",
 ]
+
+[project.urls]
+Repository = "https://github.com/joaquinrog/elite-cv"
+Issues = "https://github.com/joaquinrog/elite-cv/issues"
+Documentation = "https://github.com/joaquinrog/elite-cv/tree/main/docs"
 
 [project.optional-dependencies]
 test = ["pytest>=9.1.1,<10"]

@@ -1,16 +1,15 @@
-# Elite CV
+# Elite CV Builder by joaq
 
-**A Git-native CV system that makes AI show its work. Every bullet has receipts.**
+**A local-first, evidence-backed CV and resume builder that makes AI show its work. Every bullet has receipts.**
 
-Elite CV turns fragmented career evidence into role-specific, inspectable CVs.
+Elite CV Builder turns fragmented career evidence into role-specific, inspectable CVs.
 Agents can help organize and draft, but final bullets remain linked to approved
 claims and uncertain facts stay visible. The deterministic build does not need
 an external AI API.
 
-This directory is a proposed public extraction from a private CV workspace. It
-uses fictional data only, but a clean-history and artifact audit is still
-required before publication. Create a fresh Git history rather than publishing
-the private workspace history.
+This is an independent open-source alpha by joaq. It uses fictional data only.
+Create a new private workspace for personal material; do not publish a private
+workspace history or generated artifacts without a full review.
 
 ## Product proof
 
@@ -35,7 +34,7 @@ Poppler with `pdftotext`, `pdftoppm`, and `pdfinfo`.
 python -m venv .venv
 .venv/bin/python -m pip install -e ".[test]"
 .venv/bin/python -m elitecv doctor --root examples/synthetic-profile
-.venv/bin/python -m pytest -q
+PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 .venv/bin/python -m pytest -q
 .venv/bin/python -m elitecv build \
   --root examples/synthetic-profile \
   --target robotics-software \
@@ -97,14 +96,22 @@ In v0.1, a share bundle may contain only claims marked `shareable`. Claims marke
 
 ## Agent workflow
 
+The portable skill lives at `skills/elite-cv-builder/SKILL.md`. It works with
+compatible local coding agents and is packaged for local Claude Code and Codex
+testing. It is not yet a published marketplace listing; see
+`docs/agent-skill.md`.
+
 Paste this prompt into a coding agent after reading `AGENTS.md` and
 `docs/agent-workflow.md`:
 
 ```text
 Read AGENTS.md and docs/agent-workflow.md before editing.
 
-Inspect the files under sources/private/ and create source records, claims,
-profile entries, and open questions for a CV targeted at [TARGET ROLE].
+Before inspecting source files, ask whether I explicitly allow this agent and
+its provider to process them. If I do not approve, help me enter reviewed facts
+manually instead. If I approve, inspect sources/private/ and create source
+records, claims, profile entries, and open questions for a CV targeted at
+[TARGET ROLE].
 
 Do not invent dates, metrics, titles, awards, rankings, technologies, links,
 or outcomes. Do not edit generated LaTeX. Every proposed CV bullet must
@@ -131,9 +138,15 @@ one release-eligible approved claim. It is not a factual-truth guarantee.
 
 ## Boundaries
 
-Elite CV does not scrape LinkedIn, provide a hosted editor, predict hiring
-outcomes, promise universal ATS compatibility, or claim compatibility with
-every coding agent. See `docs/privacy.md`, `docs/threat-model.md`, and
+Elite CV Builder does not yet include a native importer for existing PDFs, DOCX
+files, LaTeX CVs, or other CV schemas; that import path is active product work.
+If a user's agent can read those formats, the user may give the material to that
+agent after explicit privacy consent. The agent must then map reviewed evidence
+into source records, claims, and profile entries rather than treating existing
+CV bullets as approved facts. Elite CV Builder itself does not upload the
+material. It also does not scrape LinkedIn, provide a hosted editor, predict
+hiring outcomes, promise universal ATS compatibility, or claim compatibility
+with every coding agent. See `docs/privacy.md`, `docs/threat-model.md`, and
 `docs/troubleshooting.md` for supported behavior and known limitations.
 
 ## Contributing

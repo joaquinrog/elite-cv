@@ -9,7 +9,7 @@
     "data/profile.yml": "af8fbc5e4140efbdc1ebbcdc6bc89e57c59bbdf3464fd578d232505aa861b14c",
     "data/variants/robotics-software.yml": "8e567db917fcbb05491c41cb75bb0bd9aacdd6bddf3f3da8e9fa9ff0202dfcaf"
   },
-  "built_at": "2026-08-10T13:46:56.463249+00:00",
+  "built_at": "2026-08-10T21:55:40.796962+00:00",
   "tools": {
     "python3": "Python 3.12.3",
     "latexmk": "Latexmk, John Collins, 31 Jan. 2024. Version 4.83",

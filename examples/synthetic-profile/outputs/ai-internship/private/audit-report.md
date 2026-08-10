@@ -1,4 +1,4 @@
-# Elite CV audit report
+# Elite CV Builder by joaq audit report
 
 - Status: **PASS**
 - Variant: `ai-internship`

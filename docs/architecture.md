@@ -1,6 +1,6 @@
 # Architecture
 
-Elite CV has one deterministic pipeline and one optional agent boundary:
+Elite CV Builder has one deterministic pipeline and one optional agent boundary:
 
 ```text
 source records -> claims -> approved profile bullets -> variant selection

@@ -7,7 +7,7 @@ decision.
 - Add a failing test before production behavior changes.
 - Preserve schema versioning and release gates.
 - Keep generated LaTeX out of the source-of-truth workflow.
-- Run `python -m pytest -q`, the relevant `elitecv build` command, and
+- Run `PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 python -m pytest -q`, the relevant `elitecv build` command, and
   `elitecv check-public` before opening a pull request.
 - Explain any new dependency, workflow permission, or privacy tradeoff.
 

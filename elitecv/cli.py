@@ -41,7 +41,7 @@ def _write_private_file(path: Path, contents: str) -> None:
 
 
 def _doctor(root: Path) -> int:
-    print(f"Elite CV {__version__} doctor: {root}")
+    print(f"Elite CV Builder by joaq {__version__} doctor: {root}")
     checks = [("python3", shutil.which("python3")), ("PyYAML", None)]
     try:
         import yaml  # noqa: F401
@@ -266,9 +266,11 @@ def _release(root: Path, target: str, acknowledge: bool) -> int:
     release_dir = result.output_dir / "release"
     if release_dir.exists():
         shutil.rmtree(release_dir)
-    release_dir.mkdir()
+    _private_directory(release_dir)
     for path in (result.pdf_path, result.preview_path):
-        shutil.copy2(path, release_dir / path.name)
+        destination = release_dir / path.name
+        shutil.copy2(path, destination)
+        _restrict_private_path(destination, 0o600)
     print(f"Released local share bundle: {release_dir}")
     print("Nothing was uploaded or published.")
     return 0
@@ -292,7 +294,7 @@ def _variant_create(root: Path, variant_id: str) -> int:
     except WorkspaceError as exc:
         print(f"ERROR {exc}", file=sys.stderr)
         return 1
-    template_path = data_dir / "variants" / "robotics-software.yml"
+    template_path = data_dir / "variants" / "general.yml"
     variants_dir = (data_dir / "variants").resolve()
     destination = (variants_dir / f"{variant_id}.yml").resolve()
     try:
@@ -306,14 +308,17 @@ def _variant_create(root: Path, variant_id: str) -> int:
     if not template_path.exists():
         print("ERROR no variant template available", file=sys.stderr)
         return 1
-    text = template_path.read_text(encoding="utf-8").replace("id: robotics-software", f"id: {variant_id}")
-    destination.write_text(text, encoding="utf-8")
+    text = template_path.read_text(encoding="utf-8").replace("id: general", f"id: {variant_id}", 1)
+    _write_private_file(destination, text)
     print(destination)
     return 0
 
 
 def build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(prog="elitecv", description="Git-native CVs with inspectable claim provenance.")
+    parser = argparse.ArgumentParser(
+        prog="elitecv",
+        description="Local-first, evidence-backed CVs with inspectable claim provenance.",
+    )
     parser.add_argument("--version", action="version", version=__version__)
     subparsers = parser.add_subparsers(dest="command", required=True)
 

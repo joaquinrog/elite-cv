@@ -72,7 +72,7 @@ def render_evidence_report(
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Elite CV evidence report: {escape(documents.variant.get('id', ''))}</title>
+  <title>Elite CV Builder by joaq evidence report: {escape(documents.variant.get('id', ''))}</title>
   <style>
     :root {{ color-scheme: light dark; }}
     body {{ font: 16px/1.5 system-ui, sans-serif; max-width: 900px; margin: 2rem auto; padding: 0 1rem; }}
@@ -113,7 +113,7 @@ def render_audit_report(
     status = "PASS" if validation.is_valid and validation.traceability_coverage == 1.0 else "BLOCKED"
     warnings = "\n".join(f"- `{issue.code}`: {issue.message}" for issue in validation.warnings) or "- None"
     errors = "\n".join(f"- `{issue.code}`: {issue.message}" for issue in validation.errors) or "- None"
-    return f"""# Elite CV audit report
+    return f"""# Elite CV Builder by joaq audit report
 
 - Status: **{status}**
 - Variant: `{documents.variant.get('id', '')}`
