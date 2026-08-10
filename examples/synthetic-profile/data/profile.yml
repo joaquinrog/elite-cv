@@ -1,0 +1,75 @@
+schema_version: 1
+profile:
+  id: profile.synthetic-alex-rivera
+  name: Alex Rivera
+  headline: Robotics Software Engineer
+  contact:
+    email: alex@example.com
+    links:
+      - label: github.com/example
+        url: https://github.com/example
+      - label: alex.example.com
+        url: https://alex.example.com
+  entries:
+    - id: entry.synthetic-rover
+      section: experience
+      organization: Northstar Robotics Lab
+      role: Robotics Software Engineer
+      location: Remote
+      start_date: 2024-04
+      end_date: 2025-01
+      date_precision: month
+      bullets:
+        - id: bullet.synthetic-control
+          text: Built Java control software for a competition rover and documented feedback loops.
+          claim_ids:
+            - claim.rover.control
+          review_status: approved
+        - id: bullet.synthetic-telemetry
+          text: Added telemetry and field-test notes to support repeatable rover tuning.
+          claim_ids:
+            - claim.rover.telemetry
+          review_status: approved
+    - id: entry.synthetic-vision
+      section: projects
+      organization: Warehouse Navigation Prototype
+      role: Computer Vision Developer
+      location: Open source lab
+      start_date: 2023-09
+      end_date: 2024-03
+      date_precision: month
+      bullets:
+        - id: bullet.synthetic-odometry
+          text: Implemented camera-based odometry for a warehouse navigation prototype.
+          claim_ids:
+            - claim.vision.odometry
+          review_status: approved
+    - id: entry.synthetic-ledger
+      section: projects
+      organization: Evidence Ledger
+      role: Tools Developer
+      location: Local project
+      start_date: 2024-06
+      end_date: null
+      date_precision: month
+      bullets:
+        - id: bullet.synthetic-ledger
+          text: Created a local validation tool that links draft bullets to reviewed claims.
+          claim_ids:
+            - claim.ledger.validation
+          review_status: approved
+    - id: entry.synthetic-education
+      section: education
+      organization: Northstar Institute of Technology
+      role: B.S. in Computer Engineering
+      location: Portland, Oregon
+      start_date: 2022-09
+      end_date: 2026-06
+      date_precision: month
+      bullets: []
+  skills:
+    - Java
+    - Python
+    - Control systems
+    - Computer vision
+    - Git

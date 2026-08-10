@@ -1,0 +1,27 @@
+name: Bug report
+description: Report a reproducible problem without including private CV data.
+title: "bug: "
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: Do not include resumes, source documents, credentials, or personal contact data.
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction
+      description: Include synthetic or redacted inputs and the exact command.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+    validations:
+      required: true

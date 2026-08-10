@@ -1,0 +1,10 @@
+title = "Elite CV gitleaks configuration"
+
+[extend]
+useDefault = true
+
+[[allowlists]]
+description = "Synthetic secret fixtures are exercised by the Python test suite."
+paths = [
+  '''^tests/''',
+]

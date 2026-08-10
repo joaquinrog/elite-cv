@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Elite CV claims document",
+  "type": "object",
+  "required": ["schema_version", "claims"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "claims": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "statement", "evidence", "evidence_status", "review_status", "disclosure"],
+        "properties": {
+          "id": {"type": "string", "minLength": 1},
+          "statement": {"type": "string", "minLength": 1},
+          "evidence": {"type": "array"},
+          "evidence_status": {"enum": ["sourced", "self_attested", "externally_verified", "unsupported", "conflicted"]},
+          "review_status": {"enum": ["pending", "approved", "rejected"]},
+          "disclosure": {"enum": ["private", "shareable", "restricted"]}
+        }
+      }
+    }
+  }
+}

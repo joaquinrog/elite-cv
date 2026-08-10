@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Elite CV variant document",
+  "type": "object",
+  "required": ["schema_version", "id", "target_role", "sections", "include_entries"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "id": {"type": "string", "minLength": 1},
+    "target_role": {"type": "string", "minLength": 1},
+    "locale": {"type": "string"},
+    "page_size": {"enum": ["letter", "a4"]},
+    "page_target": {"type": "integer", "minimum": 1},
+    "sections": {"type": "array", "items": {"type": "string"}},
+    "include_entries": {"type": "array", "items": {"type": "string"}},
+    "exclude_entries": {"type": "array", "items": {"type": "string"}},
+    "required_claim_ids": {"type": "array", "items": {"type": "string"}},
+    "allowed_disclosures": {"type": "array", "items": {"enum": ["shareable", "restricted", "private"]}}
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "elitecv_version": "0.1.0",
+  "schema_version": 1,
+  "variant_id": "robotics-software",
+  "target_role": "Robotics Software Intern",
+  "input_hashes": {
+    "data/sources.yml": "e961ed5dd664dbf3ff85b9e43d13137d5016049e5d6e3e1091b508aa2136ab80",
+    "data/claims.yml": "a21a9e6d5082326f5788d6b223ce7264fb0561dc4f61c66f8775129c200edd60",
+    "data/profile.yml": "af8fbc5e4140efbdc1ebbcdc6bc89e57c59bbdf3464fd578d232505aa861b14c",
+    "data/variants/robotics-software.yml": "8e567db917fcbb05491c41cb75bb0bd9aacdd6bddf3f3da8e9fa9ff0202dfcaf"
+  },
+  "built_at": "2026-08-10T13:46:56.463249+00:00",
+  "tools": {
+    "python3": "Python 3.12.3",
+    "latexmk": "Latexmk, John Collins, 31 Jan. 2024. Version 4.83",
+    "pdflatex": "pdfTeX 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian)",
+    "pdftotext": "pdftotext version 24.02.0",
+    "pdftoppm": "pdftoppm version 24.02.0",
+    "pdfinfo": "pdfinfo version 24.02.0"
+  },
+  "page_count": 1,
+  "traceability_coverage": 1.0,
+  "checks": {
+    "schema": true,
+    "provenance": true,
+    "pdf_text": true,
+    "preview": true
+  }
+}

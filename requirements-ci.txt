@@ -1,0 +1,4 @@
+# Exact CI inputs. Update only through a reviewed dependency update.
+PyYAML==6.0.3
+pytest==9.1.1
+setuptools==84.0.0
