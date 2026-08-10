@@ -26,6 +26,7 @@ jobs:
             poppler-utils \
             lmodern \
             texlive-latex-base \
+            texlive-latex-extra \
             texlive-latex-recommended
       - name: Install locked CI dependencies
         run: |
