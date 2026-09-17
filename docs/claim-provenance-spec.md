@@ -27,7 +27,7 @@ claims:
     statement: A concise source-supported statement.
     evidence:
       - source_id: source.example
-        locator: page 2
+        locator: "page:2"
         excerpt: null
     evidence_status: sourced
     review_status: approved

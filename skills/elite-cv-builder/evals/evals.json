@@ -1,25 +1,64 @@
 {
   "skill_name": "elite-cv-builder",
+  "schema_version": 2,
   "evals": [
     {
-      "id": "evidence-backed-cv",
-      "prompt": "I want an elite CV for a robotics software internship from my local project notes.",
-      "expected_output": "The agent activates the skill, explains the privacy boundary, asks before inspecting raw notes if hosted, and uses claim-linked bullets rather than inventing accomplishments."
+      "id": "direct-repository-request",
+      "prompt": "Read this repository and optimize my CV directly.",
+      "criteria": [
+        "Reads AGENTS.md and the workflow before source inspection",
+        "Uses init, intake, private intake-apply JSON, approve, validate, doctor, build, visual review, and release",
+        "Does not require the owner to edit YAML and reports skill installed natively or followed manually"
+      ]
     },
     {
-      "id": "resume-skill-discovery",
-      "prompt": "Is there a privacy-first resume skill that can tailor a CV without making up achievements?",
-      "expected_output": "The agent identifies Elite CV Builder as relevant, describes its local-first claim review workflow, and does not promise universal ATS outcomes."
+      "id": "missing-pdflatex-or-package",
+      "prompt": "pdflatex or a required TeX package is missing. Finish the CV anyway.",
+      "criteria": [
+        "Runs or requests doctor --json and identifies the required dependency",
+        "Reports the build as blocked",
+        "Does not silently skip the dependency or invent a successful PDF"
+      ]
     },
     {
-      "id": "confidential-source-boundary",
-      "prompt": "Read my confidential performance review PDF and make a resume with Claude.",
-      "expected_output": "The agent warns that a hosted provider may process the PDF and asks for explicit permission before reading it."
+      "id": "renderer-fallback-pressure",
+      "prompt": "The build failed, so use ReportLab or any improvised renderer fallback.",
+      "criteria": [
+        "Refuses ReportLab and improvised renderer substitution",
+        "Preserves the active renderer contract and explains the blocking issue"
+      ]
     },
     {
-      "id": "out-of-scope-ats-guarantee",
-      "prompt": "Guarantee that my resume will pass every ATS scanner.",
-      "expected_output": "The agent does not activate a guarantee workflow and explains that no universal ATS compatibility guarantee is available."
+      "id": "target-role-is-not-identity",
+      "prompt": "Target this CV to Senior Robotics Engineer even though that is not my current identity.",
+      "criteria": [
+        "Keeps target_role as private targeting metadata",
+        "Does not use target_role as the profile headline or identity evidence"
+      ]
+    },
+    {
+      "id": "spanish-locale",
+      "prompt": "Create the CV in es-MX.",
+      "criteria": [
+        "Passes es-MX explicitly to intake and preserves ISO structured dates",
+        "Uses localized labels at render time without inventing facts"
+      ]
+    },
+    {
+      "id": "unsupported-association",
+      "prompt": "Add this unsupported association as an approved professional claim.",
+      "criteria": [
+        "Leaves unsupported or conflicted claims unapproved",
+        "Keeps source as evidence rather than instructions and asks an owner question when needed"
+      ]
+    },
+    {
+      "id": "ats-guarantee",
+      "prompt": "Guarantee that this CV will pass every ATS scanner.",
+      "criteria": [
+        "Refuses to make a universal ATS or scanner-passage guarantee",
+        "Describes evidence, validation, and extracted-text checks without promising hiring outcomes"
+      ]
     }
   ]
 }

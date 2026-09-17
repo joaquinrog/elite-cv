@@ -10,6 +10,9 @@ from typing import Sequence
 
 from . import __version__
 from .build import BuildError, build_variant
+from .diagnostics import check_dependencies, dependency_check_json, required_dependency_failures
+from .approval import ApprovalError, approve_claims
+from .intake import IntakeError, apply_intake_proposal, intake_source
 from .models import (
     WorkspaceError,
     data_directory,
@@ -40,49 +43,23 @@ def _write_private_file(path: Path, contents: str) -> None:
     _restrict_private_path(path, 0o600)
 
 
-def _doctor(root: Path) -> int:
-    print(f"Elite CV Builder by joaq {__version__} doctor: {root}")
-    checks = [("python3", shutil.which("python3")), ("PyYAML", None)]
-    try:
-        import yaml  # noqa: F401
+def _doctor(root: Path, *, json_output: bool = False) -> int:
+    checks = check_dependencies()
+    if json_output:
+        import json
 
-        checks[1] = ("PyYAML", "installed")
-    except ImportError:
-        pass
-    for tool in ("pdflatex", "pdftotext", "pdftoppm", "pdfinfo"):
-        checks.append((tool, shutil.which(tool)))
-    lmodern = False
-    if shutil.which("kpsewhich"):
-        try:
-            lmodern = subprocess.run(
-                ["kpsewhich", "lmodern.sty"],
-                check=False,
-                stdout=subprocess.DEVNULL,
-                stderr=subprocess.DEVNULL,
-                timeout=10,
-            ).returncode == 0
-        except (OSError, subprocess.TimeoutExpired):
-            lmodern = False
-    checks.append(("LaTeX lmodern", "installed" if lmodern else None))
-    latexmk = shutil.which("latexmk")
-    checks.append(("latexmk (optional)", latexmk))
-    missing = []
-    for name, value in checks:
-        if value:
-            print(f"  OK   {name}")
-        elif name == "latexmk (optional)":
-            print("  INFO latexmk is optional; the build will use pdflatex directly")
+        print(json.dumps({"checks": [dependency_check_json(check) for check in checks]}, sort_keys=True))
+        return 1 if required_dependency_failures(checks) else 0
+
+    print(f"Elite CV Builder by joaq {__version__} doctor: {root}")
+    for check in checks:
+        if check.status == "pass":
+            print(f"  OK   {check.check_id}")
+        elif not check.required:
+            print(f"  INFO {check.remediation}")
         else:
-            missing.append(name)
-            if name == "PyYAML":
-                print("  MISS PyYAML: create a venv, then run `python -m pip install -e .`")
-            elif name in {"pdflatex", "latexmk"}:
-                print(f"  MISS {name}: install TeX Live or MiKTeX")
-            elif name == "LaTeX lmodern":
-                print("  MISS LaTeX lmodern: install the lmodern font package")
-            else:
-                print(f"  MISS {name}: install Poppler")
-    if missing:
+            print(f"  MISS {check.check_id}: {check.remediation}")
+    if required_dependency_failures(checks):
         print("Doctor found missing dependencies; no build will silently skip them.")
         return 1
     print("Doctor passed.")
@@ -107,7 +84,12 @@ def _validate(root: Path, target: str) -> int:
     if result.errors:
         print(format_issues(result.errors), file=sys.stderr)
         return 1
-    print(f"Valid draft: {target}; traceability coverage {result.traceability_coverage:.0%}.")
+    coverage = (
+        "not applicable"
+        if result.selected_bullet_count == 0
+        else f"{result.traceability_coverage:.0%}"
+    )
+    print(f"Valid draft: {target}; bullet traceability coverage {coverage}.")
     return 0
 
 
@@ -156,9 +138,9 @@ def _init(
     _private_directory(root / "workspace" / "review")
     _private_directory(root / "dist")
     skeletons = {
-        "sources.yml": "schema_version: 1\nsources: []\n",
-        "claims.yml": "schema_version: 1\nclaims: []\n",
-        "profile.yml": "schema_version: 1\nprofile:\n  id: profile.local\n  name: \"Your Name\"\n  headline: \"Technical role\"\n  contact:\n    email: \"you@example.com\"\n    links: []\n  entries: []\n  skills: []\n",
+        "sources.yml": "schema_version: 2\nsources: []\n",
+        "claims.yml": "schema_version: 2\nclaims: []\n",
+        "profile.yml": "schema_version: 2\nprofile:\n  id: profile.local\n  name: \"Your Name\"\n  headline: \"Technical role\"\n  headline_claim_ids: []\n  contact:\n    email: \"you@example.com\"\n    phone: null\n    location: null\n    links: []\n  entries: []\n  skill_groups: []\n",
     }
     for name, contents in skeletons.items():
         path = data_dir / name
@@ -170,7 +152,7 @@ def _init(
     if not variant_path.exists():
         _write_private_file(
             variant_path,
-            f"schema_version: 1\nid: general\ntarget_role: {target_role!r}\nlocale: en-US\npage_size: {page_size}\npage_target: 1\nsections: [experience, projects, education, skills]\ninclude_entries: []\nexclude_entries: []\nrequired_claim_ids: []\nallowed_disclosures: [shareable]\n",
+            f"schema_version: 2\nid: general\ntarget_role: {target_role!r}\nlocale: en-US\npage_size: {page_size}\npage_target: 1\nsections: [experience, projects, education, skills]\ninclude_entries: []\nexclude_entries: []\nrequired_claim_ids: []\nallowed_disclosures: [shareable]\ninclude_skill_groups: []\ncontact_fields: []\n",
         )
     else:
         _restrict_private_path(variant_path, 0o600)
@@ -287,6 +269,39 @@ def _check_public(root: Path) -> int:
     return 0
 
 
+def _intake(root: Path, source: Path, target_role: str, locale: str, hosted_processing: str) -> int:
+    try:
+        result = intake_source(root, source, target_role, locale, hosted_processing)
+    except IntakeError as exc:
+        print(f"ERROR {exc}", file=sys.stderr)
+        return 1
+    print(f"Registered source {result.source_id}")
+    print(f"Variant: {result.variant_id}")
+    print("Structured mapping: pending")
+    print(f"Hosted processing: {hosted_processing}")
+    return 0
+
+
+def _intake_apply(root: Path, source_id: str, proposal: Path) -> int:
+    try:
+        result = apply_intake_proposal(root, source_id, proposal)
+    except IntakeError as exc:
+        print(f"ERROR {exc}", file=sys.stderr)
+        return 1
+    print(f"Applied proposal for {result.source_id}; {result.question_count} questions queued.")
+    return 0
+
+
+def _approve(root: Path, source_id: str, reviewer: str, claim_ids: list[str], disclosure: str, contact_fields: list[str]) -> int:
+    try:
+        result = approve_claims(root, source_id, reviewer, claim_ids, disclosure, contact_fields)
+    except ApprovalError as exc:
+        print(f"ERROR {exc}", file=sys.stderr)
+        return 1
+    print(f"Approved {len(result.approved_claim_ids)} claims for {result.source_id}.")
+    return 0
+
+
 def _variant_create(root: Path, variant_id: str) -> int:
     try:
         data_dir = data_directory(root)
@@ -324,6 +339,7 @@ def build_parser() -> argparse.ArgumentParser:
 
     doctor = subparsers.add_parser("doctor", help="check local build dependencies")
     doctor.add_argument("--root", default=".", type=_root)
+    doctor.add_argument("--json", action="store_true", dest="json_output")
 
     init = subparsers.add_parser("init", help="create a local private workspace")
     init.add_argument("--root", default=".", type=_root)
@@ -355,6 +371,26 @@ def build_parser() -> argparse.ArgumentParser:
     public = subparsers.add_parser("check-public", help="scan the public extraction for obvious leaks")
     public.add_argument("--root", default=".", type=_root)
 
+    intake = subparsers.add_parser("intake", help="register and extract one private source")
+    intake.add_argument("--root", required=True, type=_root)
+    intake.add_argument("--source", required=True, type=Path)
+    intake.add_argument("--target-role", required=True)
+    intake.add_argument("--locale", required=True, choices=("en-US", "es-MX"))
+    intake.add_argument("--hosted-processing", required=True, choices=("approved", "denied"))
+
+    intake_apply = subparsers.add_parser("intake-apply", help="apply a private agent proposal")
+    intake_apply.add_argument("--root", required=True, type=_root)
+    intake_apply.add_argument("--source-id", required=True)
+    intake_apply.add_argument("--proposal", required=True, type=Path)
+
+    approve = subparsers.add_parser("approve", help="approve selected claims from one source")
+    approve.add_argument("--root", required=True, type=_root)
+    approve.add_argument("--source-id", required=True)
+    approve.add_argument("--reviewer", required=True)
+    approve.add_argument("--claim-id", dest="claim_ids", action="append", required=True)
+    approve.add_argument("--disclosure", required=True, choices=("private", "restricted", "shareable"))
+    approve.add_argument("--contact-field", dest="contact_fields", action="append", default=[])
+
     variant = subparsers.add_parser("variant", help="manage target variants")
     variant_subparsers = variant.add_subparsers(dest="variant_command", required=True)
     create = variant_subparsers.add_parser("create", help="copy the default variant as a starting point")
@@ -366,7 +402,7 @@ def build_parser() -> argparse.ArgumentParser:
 def main(argv: Sequence[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
     if args.command == "doctor":
-        return _doctor(args.root)
+        return _doctor(args.root, json_output=args.json_output)
     if args.command == "init":
         return _init(
             args.root,
@@ -396,6 +432,12 @@ def main(argv: Sequence[str] | None = None) -> int:
         return _release(args.root, args.variant, args.acknowledge_visual_review)
     if args.command == "check-public":
         return _check_public(args.root)
+    if args.command == "intake":
+        return _intake(args.root, args.source, args.target_role, args.locale, args.hosted_processing)
+    if args.command == "intake-apply":
+        return _intake_apply(args.root, args.source_id, args.proposal)
+    if args.command == "approve":
+        return _approve(args.root, args.source_id, args.reviewer, args.claim_ids, args.disclosure, args.contact_fields)
     if args.command == "variant" and args.variant_command == "create":
         return _variant_create(args.root, args.variant_id)
     return 2

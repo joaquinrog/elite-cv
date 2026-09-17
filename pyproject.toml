@@ -24,7 +24,7 @@ Issues = "https://github.com/joaquinrog/elite-cv/issues"
 Documentation = "https://github.com/joaquinrog/elite-cv/tree/main/docs"
 
 [project.optional-dependencies]
-test = ["pytest>=9.1.1,<10"]
+test = ["pytest>=9.1.1,<10", "jsonschema>=4.23,<5"]
 
 [project.scripts]
 elitecv = "elitecv.cli:main"

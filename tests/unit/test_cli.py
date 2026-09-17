@@ -6,6 +6,7 @@ import subprocess
 import pytest
 
 from elitecv.cli import _doctor, _init, main
+from elitecv.diagnostics import dependency_inventory
 from elitecv.models import WorkspaceError, load_workspace
 
 
@@ -129,3 +130,40 @@ def test_doctor_uses_the_public_product_name(monkeypatch, tmp_path, capsys):
     assert _doctor(tmp_path) == 0
 
     assert capsys.readouterr().out.startswith("Elite CV Builder by joaq 0.1.0 doctor:")
+
+
+def test_dependency_inventory_covers_both_templates_and_required_tools():
+    inventory = dependency_inventory()
+    check_ids = {item.check_id for item in inventory}
+
+    for filename in (
+        "article.cls",
+        "inputenc.sty",
+        "fontenc.sty",
+        "lmodern.sty",
+        "geometry.sty",
+        "hyperref.sty",
+        "enumitem.sty",
+    ):
+        assert f"tex.file.{filename}" in check_ids
+    for tool in ("pdflatex", "pdftotext", "pdftoppm", "pdfinfo"):
+        assert f"renderer.tool.{tool}" in check_ids
+    assert "renderer.tool.latexmk" in check_ids
+
+    assert all(item.category for item in inventory)
+    assert next(item for item in inventory if item.check_id == "renderer.tool.latexmk").required is False
+
+
+def test_doctor_json_is_stable_and_does_not_expose_paths(monkeypatch, tmp_path, capsys):
+    monkeypatch.setattr("elitecv.cli.shutil.which", lambda _tool: None)
+
+    assert main(["doctor", "--root", str(tmp_path), "--json"]) == 1
+
+    payload = __import__("json").loads(capsys.readouterr().out)
+    assert payload["checks"]
+    for check in payload["checks"]:
+        assert set(("check_id", "status", "category", "remediation")) <= check.keys()
+        assert str(tmp_path) not in __import__("json").dumps(check)
+        assert "source" not in check
+        assert "excerpt" not in check
+    assert {check["status"] for check in payload["checks"]} >= {"missing", "optional-missing"}
