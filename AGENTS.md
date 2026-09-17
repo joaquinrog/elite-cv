@@ -21,6 +21,11 @@ files under `docs/` before editing structured data.
   `doctor --json`, `build`, human visual review, and `release`.
 - Run `check-public` only against a clean public candidate tree, never as a claim
   that a private workspace is publishable.
+- Enforce the Elite Bullet Quality Rubric (`docs/visual-review-rubric.md`): reject
+  vague responsibility descriptions; apply Route A (domain-relevant measurable evidence)
+  to public/personal projects and Route B (confidentiality-aware technical depth) to
+  production experience. Never invent, pressure for, or leak proprietary business metrics.
+  Distinguish rewrite debt from content debt; do not inflate maturing projects with rhetoric.
 - Never use ReportLab or an improvised renderer fallback. If a required dependency
   is missing, report the build as blocked.
 - Report changed files, unresolved questions, privacy decisions, and output paths.

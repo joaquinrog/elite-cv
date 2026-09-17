@@ -91,10 +91,27 @@ def _render_skill_groups(profile: dict[str, Any], variant: dict[str, Any]) -> st
 
 
 def _render_entry(entry: dict[str, Any], locale_code: str) -> str:
-    lines = [f"\\textbf{{{latex_escape(_entry_title(entry))}}}\\\\[-1pt]"]
-    location = entry.get("location")
-    metadata = f"\\textit{{{latex_escape(str(location))}}}" if location else ""
-    lines.append(f"{metadata} \\hfill {latex_escape(_date_range(entry, locale_code))}")
+    section = str(entry.get("section") or "")
+    date_text = latex_escape(_date_range(entry, locale_code))
+    if section == "projects":
+        role = entry.get("role") or entry.get("title") or ""
+        organization = entry.get("organization") or ""
+        proj_name = latex_escape(str(organization or role))
+        lines = [f"\\textbf{{{proj_name}}} \\hfill {date_text}\\\\[-1pt]"]
+        meta_parts: list[str] = []
+        if organization and role:
+            meta_parts.append(latex_escape(str(role)))
+        location = entry.get("location")
+        if location:
+            meta_parts.append(latex_escape(str(location)))
+        if meta_parts:
+            lines.append(f"\\textit{{{ ' | '.join(meta_parts) }}}")
+    else:
+        lines = [f"\\textbf{{{latex_escape(_entry_title(entry))}}}\\\\[-1pt]"]
+        location = entry.get("location")
+        metadata = f"\\textit{{{latex_escape(str(location))}}}" if location else ""
+        lines.append(f"{metadata} \\hfill {date_text}")
+
     bullets = entry.get("bullets", []) or []
     if bullets:
         lines.append(r"\begin{itemize}")
@@ -122,7 +139,7 @@ def render_latex(documents: WorkspaceDocuments, validation: ValidationResult) ->
         entries = entries_by_section.get(section, [])
         if not entries:
             continue
-        body = "\n\n".join(_render_entry(entry, locale.code) for entry in entries)
+        body = "\n\n\\cventrysep\n".join(_render_entry(entry, locale.code) for entry in entries)
         sections.append(f"\\cvsection{{{locale.section(section)}}}\n{body}")
 
     template_path = Path(__file__).resolve().parents[1] / "templates" / "default" / "resume.tex"

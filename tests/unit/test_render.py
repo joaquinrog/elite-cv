@@ -33,3 +33,22 @@ def test_unsupported_locale_fails_clearly():
 
     with pytest.raises(ValueError, match="Unsupported locale"):
         get_locale("fr-FR")
+
+
+def test_project_entry_formatting_highlights_project_name():
+    from elitecv.render import _render_entry
+
+    project_entry = {
+        "section": "projects",
+        "organization": "OpenCode Multi-Agent",
+        "role": "Personal Project",
+        "location": "Multi-provider LLM systems",
+        "start_date": "2026-01",
+        "end_date": "2026-09",
+        "bullets": [{"text": "Engineered agent orchestration system."}],
+    }
+
+    rendered = _render_entry(project_entry, "en-US")
+    lines = rendered.splitlines()
+    assert r"\textbf{OpenCode Multi-Agent} \hfill January 2026 - September 2026\\[-1pt]" == lines[0]
+    assert r"\textit{Personal Project | Multi-provider LLM systems}" == lines[1]

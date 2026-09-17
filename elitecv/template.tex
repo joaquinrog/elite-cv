@@ -13,8 +13,13 @@
 \setlength{\parindent}{0pt}
 \renewcommand{\familydefault}{\sfdefault}
 \renewcommand{\baselinestretch}{\CVLeading}
+\tolerance=1
+\emergencystretch=\maxdimen
+\hyphenpenalty=10000
+\hbadness=10000
 \setlist[itemize]{leftmargin=1.2em, topsep=\CVSectionAfter, itemsep=\CVItemSep, parsep=0pt}
 \newcommand{\cvsection}[1]{\vspace{\CVSectionBefore}\section*{#1}\vspace{-\CVSectionAfter}}
+\newcommand{\cventrysep}{\vspace{1.5pt}}
 
 \begin{document}
 
