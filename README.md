@@ -33,9 +33,43 @@ Turn fragmented career evidence into role-specific, inspectable CVs — with a c
 
 Three ways to use it. Pick the one that fits.
 
-### 🚀 Mode 1 · Quick demo (5 minutes)
+### 🤖 Mode 1 · Agent (Claude Code / Codex)
 
-Run the synthetic profile, see every artifact with zero personal data.
+Copy-paste this prompt into your coding agent. That's it.
+
+```text
+Read https://github.com/joaquinrog/elite-cv and follow the instructions in AGENTS.md and docs/agent-workflow.md.
+
+My current CV: [PATH TO YOUR CV .pdf/.md/.txt]
+My portfolio: [PATH OR URL]
+Relevant LinkedIn sections: [PASTE SECTIONS OR PATH]
+
+Build me a CV targeted at [TARGET ROLE] at [COMPANY — optional].
+
+Do not invent metrics, dates, or technologies that do not appear in my sources.
+Every bullet must reference a claim ID.
+Keep private data out unless I explicitly approve disclosure.
+```
+
+#### What happens next
+
+1. The agent asks permission before reading your files.
+2. It creates claims, source records, and bullets linked to evidence.
+3. It shows you claims to approve which are shareable vs private.
+4. It generates a PDF, preview image, and evidence report.
+5. You review the PDF before releasing anything.
+
+#### What you need
+
+- Your current CV in PDF, Markdown, or plain text.
+- Portfolio, GitHub, or relevant projects (URL or file).
+- LinkedIn sections you want to include (optional).
+
+The portable skill lives at `skills/elite-cv-builder/SKILL.md`. A GitHub URL does not install a skill; the coding agent should report whether the skill was installed natively or followed manually.
+
+### 🚀 Mode 2 · Quick demo (5 minutes)
+
+Want to see it work without your data? Run the synthetic example:
 
 ```bash
 python -m venv .venv
@@ -48,43 +82,7 @@ PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 .venv/bin/python -m pytest -q
   --output-dir examples/synthetic-profile/outputs
 ```
 
-Outputs:
-
-```text
-examples/synthetic-profile/outputs/robotics-software/share/cv.pdf
-examples/synthetic-profile/outputs/robotics-software/share/preview.png
-examples/synthetic-profile/outputs/robotics-software/private/evidence-report.html
-examples/synthetic-profile/outputs/robotics-software/private/audit-report.md
-examples/synthetic-profile/outputs/robotics-software/private/build-manifest.json
-```
-
-The `private/build/` directory also contains LaTeX intermediate artifacts (`.tex`, `.log`, `.aux`, etc.).
-
-Build the second variant: same `build` with `--target ai-internship`.
-
-### 🤖 Mode 2 · Agent (Claude Code / Codex)
-
-The portable skill lives at `skills/elite-cv-builder/SKILL.md`. A GitHub URL does not install a skill; the coding agent should report whether the skill was installed natively or followed manually.
-
-Paste this prompt into a coding agent after reading `AGENTS.md` and `docs/agent-workflow.md`:
-
-```text
-Read AGENTS.md and docs/agent-workflow.md before editing.
-
-Before inspecting source files, ask whether I explicitly allow this agent and
-its provider to process them. If I do not approve, help me enter reviewed facts
-manually instead. If I approve, inspect sources/private/ and create source
-records, claims, profile entries, and open questions for a CV targeted at
-[TARGET ROLE].
-
-Do not invent dates, metrics, titles, awards, rankings, technologies, links,
-or outcomes. Do not edit generated LaTeX. Every proposed CV bullet must
-reference one or more claim IDs. Preserve conflicts and keep private data out
-unless I explicitly approve its disclosure.
-
-Run the applicable validation commands and report changed files, unresolved
-questions, privacy decisions, and output paths.
-```
+Outputs go to `examples/synthetic-profile/outputs/robotics-software/share/` (PDF + preview) and `private/` (evidence report, audit, manifest). Build a second variant with `--target ai-internship`.
 
 ### ⌨️ Mode 3 · CLI (private workflow, schema v2)
 
@@ -106,7 +104,6 @@ elitecv release general --root PRIVATE_WORKSPACE --acknowledge-visual-review
 
 - You never edit YAML in the happy path — `intake-apply` consumes a private schema-v2 proposal JSON.
 - `release` never uploads or publishes anything.
-- In v0.1, only `shareable` claims reach build/release output.
 
 ## Command reference
 
