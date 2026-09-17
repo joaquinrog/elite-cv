@@ -1,5 +1,5 @@
 {
-  "experiment": "wave-5a",
+  "experiment": "wave-5b",
   "synthetic_only": true,
   "criteria": {
     "max_artifact_bytes": 314572800,
@@ -21,11 +21,11 @@
           "candidate": "current-tex-poppler",
           "fixture": "short",
           "status": "pass",
-          "elapsed_seconds": 1.133,
+          "elapsed_seconds": 1.3409,
           "artifact_sizes_bytes": {
-            "cv.pdf": 97364,
-            "preview.png": 77285,
-            "cv.txt": 569
+            "cv.pdf": 106418,
+            "preview.png": 68438,
+            "cv.txt": 535
           },
           "page_count": 1,
           "text_quality": {
@@ -49,7 +49,7 @@
           ],
           "preview": {
             "available": true,
-            "size_bytes": 77285
+            "size_bytes": 68438
           },
           "paths": {
             "pdf": "cv.pdf",
@@ -66,11 +66,11 @@
           "candidate": "current-tex-poppler",
           "fixture": "medium",
           "status": "pass",
-          "elapsed_seconds": 1.1292,
+          "elapsed_seconds": 1.24,
           "artifact_sizes_bytes": {
-            "cv.pdf": 100461,
-            "preview.png": 102745,
-            "cv.txt": 807
+            "cv.pdf": 108618,
+            "preview.png": 93679,
+            "cv.txt": 820
           },
           "page_count": 1,
           "text_quality": {
@@ -94,7 +94,7 @@
           ],
           "preview": {
             "available": true,
-            "size_bytes": 102745
+            "size_bytes": 93679
           },
           "paths": {
             "pdf": "cv.pdf",
@@ -111,11 +111,11 @@
           "candidate": "current-tex-poppler",
           "fixture": "dense",
           "status": "pass",
-          "elapsed_seconds": 1.3429,
+          "elapsed_seconds": 1.406,
           "artifact_sizes_bytes": {
-            "cv.pdf": 102366,
-            "preview.png": 129323,
-            "cv.txt": 1033
+            "cv.pdf": 110155,
+            "preview.png": 118049,
+            "cv.txt": 1089
           },
           "page_count": 1,
           "text_quality": {
@@ -139,7 +139,7 @@
           ],
           "preview": {
             "available": true,
-            "size_bytes": 129323
+            "size_bytes": 118049
           },
           "paths": {
             "pdf": "cv.pdf",
@@ -156,28 +156,25 @@
     },
     "tectonic": {
       "availability": {
-        "available": false,
-        "version": null,
-        "error": "missing_tool"
+        "available": true,
+        "version": "Tectonic 0.17.0",
+        "error": null
       },
       "runs": [
         {
           "candidate": "tectonic",
           "fixture": "short",
-          "status": "blocked",
-          "elapsed_seconds": 0,
-          "artifact_sizes_bytes": {},
-          "page_count": null,
+          "status": "pass",
+          "elapsed_seconds": 0.5681,
+          "artifact_sizes_bytes": {
+            "cv.pdf": 13993,
+            "preview.png": 41881,
+            "cv.txt": 535
+          },
+          "page_count": 1,
           "text_quality": {
-            "status": "fail",
-            "findings": [
-              {
-                "code": "text_too_short"
-              },
-              {
-                "code": "expected_text_missing"
-              }
-            ]
+            "status": "pass",
+            "findings": []
           },
           "expected_text": [
             "Lucía Nava",
@@ -187,45 +184,42 @@
           "links": [
             {
               "url": "https://behance.net/lucia-nava",
-              "status": "not_measured"
+              "status": "found"
             },
             {
               "url": "https://lucianava.example.com",
-              "status": "not_measured"
+              "status": "found"
             }
           ],
           "preview": {
-            "available": false,
-            "size_bytes": 0
+            "available": true,
+            "size_bytes": 41881
           },
           "paths": {
-            "pdf": "missing.pdf",
-            "preview": "missing.png",
-            "text": "missing.txt"
+            "pdf": "cv.pdf",
+            "preview": "preview.png",
+            "text": "cv.txt"
           },
-          "error": "missing_tool",
+          "error": null,
           "repeatability": {
-            "comparable": false,
-            "identical": false
+            "comparable": true,
+            "identical": true
           }
         },
         {
           "candidate": "tectonic",
           "fixture": "medium",
-          "status": "blocked",
-          "elapsed_seconds": 0,
-          "artifact_sizes_bytes": {},
-          "page_count": null,
+          "status": "pass",
+          "elapsed_seconds": 0.5431,
+          "artifact_sizes_bytes": {
+            "cv.pdf": 15615,
+            "preview.png": 58086,
+            "cv.txt": 820
+          },
+          "page_count": 1,
           "text_quality": {
-            "status": "fail",
-            "findings": [
-              {
-                "code": "text_too_short"
-              },
-              {
-                "code": "expected_text_missing"
-              }
-            ]
+            "status": "pass",
+            "findings": []
           },
           "expected_text": [
             "Lucía Nava",
@@ -235,45 +229,42 @@
           "links": [
             {
               "url": "https://behance.net/lucia-nava",
-              "status": "not_measured"
+              "status": "found"
             },
             {
               "url": "https://lucianava.example.com",
-              "status": "not_measured"
+              "status": "found"
             }
           ],
           "preview": {
-            "available": false,
-            "size_bytes": 0
+            "available": true,
+            "size_bytes": 58086
           },
           "paths": {
-            "pdf": "missing.pdf",
-            "preview": "missing.png",
-            "text": "missing.txt"
+            "pdf": "cv.pdf",
+            "preview": "preview.png",
+            "text": "cv.txt"
           },
-          "error": "missing_tool",
+          "error": null,
           "repeatability": {
-            "comparable": false,
+            "comparable": true,
             "identical": false
           }
         },
         {
           "candidate": "tectonic",
           "fixture": "dense",
-          "status": "blocked",
-          "elapsed_seconds": 0,
-          "artifact_sizes_bytes": {},
-          "page_count": null,
+          "status": "pass",
+          "elapsed_seconds": 0.6028,
+          "artifact_sizes_bytes": {
+            "cv.pdf": 16452,
+            "preview.png": 73356,
+            "cv.txt": 1089
+          },
+          "page_count": 1,
           "text_quality": {
-            "status": "fail",
-            "findings": [
-              {
-                "code": "text_too_short"
-              },
-              {
-                "code": "expected_text_missing"
-              }
-            ]
+            "status": "pass",
+            "findings": []
           },
           "expected_text": [
             "Lucía Nava",
@@ -283,54 +274,51 @@
           "links": [
             {
               "url": "https://behance.net/lucia-nava",
-              "status": "not_measured"
+              "status": "found"
             },
             {
               "url": "https://lucianava.example.com",
-              "status": "not_measured"
+              "status": "found"
             }
           ],
           "preview": {
-            "available": false,
-            "size_bytes": 0
+            "available": true,
+            "size_bytes": 73356
           },
           "paths": {
-            "pdf": "missing.pdf",
-            "preview": "missing.png",
-            "text": "missing.txt"
+            "pdf": "cv.pdf",
+            "preview": "preview.png",
+            "text": "cv.txt"
           },
-          "error": "missing_tool",
+          "error": null,
           "repeatability": {
-            "comparable": false,
-            "identical": false
+            "comparable": true,
+            "identical": true
           }
         }
       ]
     },
     "typst": {
       "availability": {
-        "available": false,
-        "version": null,
-        "error": "missing_tool"
+        "available": true,
+        "version": "typst 0.15.1 (9dfd3a08)",
+        "error": null
       },
       "runs": [
         {
           "candidate": "typst",
           "fixture": "short",
-          "status": "blocked",
-          "elapsed_seconds": 0,
-          "artifact_sizes_bytes": {},
-          "page_count": null,
+          "status": "pass",
+          "elapsed_seconds": 0.217,
+          "artifact_sizes_bytes": {
+            "cv.pdf": 38800,
+            "preview.png": 79678,
+            "cv.txt": 1084
+          },
+          "page_count": 1,
           "text_quality": {
-            "status": "fail",
-            "findings": [
-              {
-                "code": "text_too_short"
-              },
-              {
-                "code": "expected_text_missing"
-              }
-            ]
+            "status": "pass",
+            "findings": []
           },
           "expected_text": [
             "Lucía Nava",
@@ -340,45 +328,42 @@
           "links": [
             {
               "url": "https://behance.net/lucia-nava",
-              "status": "not_measured"
+              "status": "found"
             },
             {
               "url": "https://lucianava.example.com",
-              "status": "not_measured"
+              "status": "found"
             }
           ],
           "preview": {
-            "available": false,
-            "size_bytes": 0
+            "available": true,
+            "size_bytes": 79678
           },
           "paths": {
-            "pdf": "missing.pdf",
-            "preview": "missing.png",
-            "text": "missing.txt"
+            "pdf": "cv.pdf",
+            "preview": "preview.png",
+            "text": "cv.txt"
           },
-          "error": "missing_tool",
+          "error": null,
           "repeatability": {
-            "comparable": false,
+            "comparable": true,
             "identical": false
           }
         },
         {
           "candidate": "typst",
           "fixture": "medium",
-          "status": "blocked",
-          "elapsed_seconds": 0,
-          "artifact_sizes_bytes": {},
-          "page_count": null,
+          "status": "pass",
+          "elapsed_seconds": 0.1921,
+          "artifact_sizes_bytes": {
+            "cv.pdf": 38800,
+            "preview.png": 79678,
+            "cv.txt": 1084
+          },
+          "page_count": 1,
           "text_quality": {
-            "status": "fail",
-            "findings": [
-              {
-                "code": "text_too_short"
-              },
-              {
-                "code": "expected_text_missing"
-              }
-            ]
+            "status": "pass",
+            "findings": []
           },
           "expected_text": [
             "Lucía Nava",
@@ -388,45 +373,42 @@
           "links": [
             {
               "url": "https://behance.net/lucia-nava",
-              "status": "not_measured"
+              "status": "found"
             },
             {
               "url": "https://lucianava.example.com",
-              "status": "not_measured"
+              "status": "found"
             }
           ],
           "preview": {
-            "available": false,
-            "size_bytes": 0
+            "available": true,
+            "size_bytes": 79678
           },
           "paths": {
-            "pdf": "missing.pdf",
-            "preview": "missing.png",
-            "text": "missing.txt"
+            "pdf": "cv.pdf",
+            "preview": "preview.png",
+            "text": "cv.txt"
           },
-          "error": "missing_tool",
+          "error": null,
           "repeatability": {
-            "comparable": false,
-            "identical": false
+            "comparable": true,
+            "identical": true
           }
         },
         {
           "candidate": "typst",
           "fixture": "dense",
-          "status": "blocked",
-          "elapsed_seconds": 0,
-          "artifact_sizes_bytes": {},
-          "page_count": null,
+          "status": "pass",
+          "elapsed_seconds": 0.2167,
+          "artifact_sizes_bytes": {
+            "cv.pdf": 38800,
+            "preview.png": 79678,
+            "cv.txt": 1084
+          },
+          "page_count": 1,
           "text_quality": {
-            "status": "fail",
-            "findings": [
-              {
-                "code": "text_too_short"
-              },
-              {
-                "code": "expected_text_missing"
-              }
-            ]
+            "status": "pass",
+            "findings": []
           },
           "expected_text": [
             "Lucía Nava",
@@ -436,26 +418,26 @@
           "links": [
             {
               "url": "https://behance.net/lucia-nava",
-              "status": "not_measured"
+              "status": "found"
             },
             {
               "url": "https://lucianava.example.com",
-              "status": "not_measured"
+              "status": "found"
             }
           ],
           "preview": {
-            "available": false,
-            "size_bytes": 0
+            "available": true,
+            "size_bytes": 79678
           },
           "paths": {
-            "pdf": "missing.pdf",
-            "preview": "missing.png",
-            "text": "missing.txt"
+            "pdf": "cv.pdf",
+            "preview": "preview.png",
+            "text": "cv.txt"
           },
-          "error": "missing_tool",
+          "error": null,
           "repeatability": {
-            "comparable": false,
-            "identical": false
+            "comparable": true,
+            "identical": true
           }
         }
       ]

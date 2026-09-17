@@ -6,8 +6,8 @@ Generated from synthetic fixtures only. Paths are intentionally omitted or relat
 
 - Host evidence: `Linux-6.17.0-40-generic-x86_64-with-glibc2.39` / Python `3.12.3`
 - **current-tex-poppler**: elitecv current renderer
-- **tectonic**: missing_tool
-- **typst**: missing_tool
+- **tectonic**: Tectonic 0.17.0
+- **typst**: typst 0.15.1 (9dfd3a08)
 
 ## Results
 
@@ -16,12 +16,12 @@ Generated from synthetic fixtures only. Paths are intentionally omitted or relat
 | current-tex-poppler | short | pass | 1 | pass | True | False |
 | current-tex-poppler | medium | pass | 1 | pass | True | False |
 | current-tex-poppler | dense | pass | 1 | pass | True | False |
-| tectonic | short | blocked | unknown | fail | True | False |
-| tectonic | medium | blocked | unknown | fail | True | False |
-| tectonic | dense | blocked | unknown | fail | True | False |
-| typst | short | blocked | unknown | fail | True | False |
-| typst | medium | blocked | unknown | fail | True | False |
-| typst | dense | blocked | unknown | fail | True | False |
+| tectonic | short | pass | 1 | pass | True | True |
+| tectonic | medium | pass | 1 | pass | True | False |
+| tectonic | dense | pass | 1 | pass | True | True |
+| typst | short | pass | 1 | pass | True | False |
+| typst | medium | pass | 1 | pass | True | True |
+| typst | dense | pass | 1 | pass | True | True |
 
 ## Decision
 
