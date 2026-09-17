@@ -1,0 +1,14 @@
+schema_version: 2
+id: medium-es-mx-a4
+target_role: Diseñadora visual
+locale: es-MX
+page_size: a4
+page_target: 1
+density: medium
+sections: [experience, projects, education, skills]
+include_entries: [entry.synthetic-estudio, entry.synthetic-education]
+exclude_entries: []
+required_claim_ids: []
+allowed_disclosures: [shareable]
+include_skill_groups: [skills.design, skills.research, skills.tools, skills.languages]
+contact_fields: [email, phone, location, links]

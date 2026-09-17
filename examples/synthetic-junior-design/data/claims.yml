@@ -1,0 +1,86 @@
+schema_version: 2
+claims:
+  - id: claim.design-role
+    statement: Lucía Nava trabajó como diseñadora visual junior en Estudio Marea Ficticia desde agosto de 2025.
+    evidence:
+      - source_id: source.synthetic-design-portfolio
+        locator: "section:perfil"
+        excerpt: null
+    evidence_status: self_attested
+    review_status: approved
+    disclosure: shareable
+    reviewed_by: synthetic-owner
+    reviewed_at: "2026-02-02"
+    questions: []
+  - id: claim.editorial-project
+    statement: Realizó un proyecto editorial independiente durante octubre de 2025.
+    evidence:
+      - source_id: source.synthetic-design-portfolio
+        locator: "section:perfil"
+        excerpt: null
+    evidence_status: self_attested
+    review_status: approved
+    disclosure: shareable
+    reviewed_by: synthetic-owner
+    reviewed_at: "2026-02-02"
+    questions: []
+  - id: claim.education
+    statement: Cursó una licenciatura ficticia en Diseño de la Comunicación Visual entre agosto de 2022 y junio de 2026.
+    evidence:
+      - source_id: source.synthetic-design-portfolio
+        locator: "section:perfil"
+        excerpt: null
+    evidence_status: self_attested
+    review_status: approved
+    disclosure: shareable
+    reviewed_by: synthetic-owner
+    reviewed_at: "2026-02-02"
+    questions: []
+  - id: claim.design-skills
+    statement: Utilizó diseño editorial, prototipado y Figma en ejercicios ficticios.
+    evidence:
+      - source_id: source.synthetic-design-portfolio
+        locator: "section:herramientas-e-idiomas"
+        excerpt: null
+    evidence_status: self_attested
+    review_status: approved
+    disclosure: shareable
+    reviewed_by: synthetic-owner
+    reviewed_at: "2026-02-02"
+    questions: []
+  - id: claim.languages
+    statement: Registró español e inglés como habilidades revisadas.
+    evidence:
+      - source_id: source.synthetic-design-portfolio
+        locator: "section:herramientas-e-idiomas"
+        excerpt: null
+    evidence_status: self_attested
+    review_status: approved
+    disclosure: shareable
+    reviewed_by: synthetic-owner
+    reviewed_at: "2026-02-02"
+    questions: []
+  - id: claim.design-system
+    statement: Diseñó componentes visuales y documentó decisiones para un sistema de interfaz ficticio.
+    evidence:
+      - source_id: source.synthetic-design-portfolio
+        locator: "section:sistema-visual"
+        excerpt: null
+    evidence_status: self_attested
+    review_status: approved
+    disclosure: shareable
+    reviewed_by: synthetic-owner
+    reviewed_at: "2026-02-02"
+    questions: []
+  - id: claim.user-research
+    statement: Organizó hallazgos de investigación para un prototipo editorial ficticio.
+    evidence:
+      - source_id: source.synthetic-design-portfolio
+        locator: "section:investigacion"
+        excerpt: null
+    evidence_status: self_attested
+    review_status: approved
+    disclosure: shareable
+    reviewed_by: synthetic-owner
+    reviewed_at: "2026-02-02"
+    questions: []

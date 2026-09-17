@@ -1,0 +1,85 @@
+schema_version: 2
+profile:
+  id: profile.synthetic-lucia-nava
+  name: Lucía Nava
+  headline: Diseñadora visual junior
+  headline_claim_ids:
+    - claim.design-role
+  contact:
+    email: lucia.nava@example.com
+    phone: "+52 55 0101 0101"
+    location: Mérida, Yucatán
+    links:
+      - label: behance.net/lucia-nava
+        url: https://behance.net/lucia-nava
+      - label: lucianava.example.com
+        url: https://lucianava.example.com
+  entries:
+    - id: entry.synthetic-estudio
+      section: experience
+      organization: Estudio Marea Ficticia
+      role: Diseñadora visual junior
+      location: Mérida, Yucatán
+      start_date: 2025-08
+      end_date: null
+      date_precision: month
+      claim_ids:
+        - claim.design-role
+      bullets:
+        - id: bullet.synthetic-system
+          text: Diseñó componentes visuales y documentó decisiones para un sistema de interfaz.
+          claim_ids:
+            - claim.design-system
+          review_status: approved
+    - id: entry.synthetic-editorial
+      section: projects
+      organization: Archivo Editorial Imaginario
+      role: Diseñadora de proyectos
+      location: Proyecto independiente
+      start_date: 2025-10
+      end_date: 2025-10
+      date_precision: month
+      claim_ids:
+        - claim.editorial-project
+      bullets:
+        - id: bullet.synthetic-research
+          text: Organizó hallazgos de investigación para un prototipo editorial.
+          claim_ids:
+            - claim.user-research
+          review_status: approved
+    - id: entry.synthetic-education
+      section: education
+      organization: Instituto Ficticio de Artes Aplicadas
+      role: Licenciatura en Diseño de la Comunicación Visual
+      location: Mérida, Yucatán
+      start_date: 2022-08
+      end_date: 2026-06
+      date_precision: month
+      claim_ids:
+        - claim.education
+      bullets: []
+  skill_groups:
+    - id: skills.design
+      label: Diseño y prototipado
+      items:
+        - name: Diseño editorial
+          claim_ids: [claim.design-skills]
+        - name: Prototipado
+          claim_ids: [claim.design-skills]
+    - id: skills.research
+      label: Investigación
+      items:
+        - name: Investigación de usuarios
+          claim_ids: [claim.user-research]
+    - id: skills.tools
+      label: Herramientas
+      items:
+        - name: Figma
+          claim_ids: [claim.design-skills]
+    - id: skills.languages
+      label: Idiomas
+      items:
+        - name: Español
+          claim_ids: [claim.languages]
+        - name: Inglés
+          claim_ids: [claim.languages]

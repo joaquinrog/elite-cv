@@ -1,4 +1,4 @@
-schema_version: 1
+schema_version: 2
 id: robotics-software
 target_role: Robotics Software Intern
 locale: en-US
@@ -18,3 +18,8 @@ exclude_entries: []
 required_claim_ids: []
 allowed_disclosures:
   - shareable
+include_skill_groups:
+  - skills.technical
+contact_fields:
+  - email
+  - links

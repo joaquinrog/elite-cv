@@ -1,19 +1,120 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "Elite CV profile document",
+  "title": "Elite CV profile document v2",
   "type": "object",
+  "additionalProperties": false,
   "required": ["schema_version", "profile"],
   "properties": {
-    "schema_version": {"const": 1},
+    "schema_version": {"const": 2},
     "profile": {
       "type": "object",
-      "required": ["id", "name", "headline", "entries"],
+      "additionalProperties": false,
+      "required": ["id", "name", "headline", "headline_claim_ids", "contact", "entries", "skill_groups"],
       "properties": {
         "id": {"type": "string", "minLength": 1},
         "name": {"type": "string", "minLength": 1},
         "headline": {"type": "string", "minLength": 1},
-        "entries": {"type": "array"},
-        "skills": {"type": "array"}
+        "headline_claim_ids": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "contact": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["email", "phone", "location", "links"],
+          "properties": {
+            "email": {"type": ["string", "null"]},
+            "phone": {"type": ["string", "null"]},
+            "location": {"type": ["string", "null"]},
+            "links": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["label", "url"],
+                "properties": {
+                  "label": {"type": "string", "minLength": 1},
+                  "url": {"type": "string", "format": "uri"}
+                }
+              }
+            }
+          }
+        },
+        "entries": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["id", "section", "organization", "role", "location", "start_date", "end_date", "date_precision", "claim_ids", "bullets"],
+            "properties": {
+              "id": {"type": "string", "minLength": 1},
+              "section": {"type": "string", "minLength": 1},
+              "organization": {"type": "string", "minLength": 1},
+              "role": {"type": "string", "minLength": 1},
+              "location": {"type": ["string", "null"]},
+              "start_date": {"type": ["string", "null"], "pattern": "^\\d{4}(?:-\\d{2}(?:-\\d{2})?)?$"},
+              "end_date": {"type": ["string", "null"], "pattern": "^\\d{4}(?:-\\d{2}(?:-\\d{2})?)?$"},
+              "date_precision": {"enum": ["year", "month", "day"]},
+              "claim_ids": {
+                "type": "array",
+                "minItems": 1,
+                "items": {"type": "string", "minLength": 1}
+              },
+              "bullets": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": ["id", "text", "claim_ids", "review_status"],
+                  "properties": {
+                    "id": {"type": "string", "minLength": 1},
+                    "text": {"type": "string", "minLength": 1},
+                    "claim_ids": {
+                      "type": "array",
+                      "minItems": 1,
+                      "items": {"type": "string", "minLength": 1}
+                    },
+                    "review_status": {"enum": ["pending", "approved", "rejected"]}
+                  }
+                }
+              }
+            },
+            "allOf": [
+              {"if": {"properties": {"date_precision": {"const": "year"}}}, "then": {"properties": {"start_date": {"type": ["string", "null"], "pattern": "^\\d{4}$"}, "end_date": {"type": ["string", "null"], "pattern": "^\\d{4}$"}}}},
+              {"if": {"properties": {"date_precision": {"const": "month"}}}, "then": {"properties": {"start_date": {"type": ["string", "null"], "pattern": "^\\d{4}-\\d{2}$"}, "end_date": {"type": ["string", "null"], "pattern": "^\\d{4}-\\d{2}$"}}}},
+              {"if": {"properties": {"date_precision": {"const": "day"}}}, "then": {"properties": {"start_date": {"type": ["string", "null"], "pattern": "^\\d{4}-\\d{2}-\\d{2}$"}, "end_date": {"type": ["string", "null"], "pattern": "^\\d{4}-\\d{2}-\\d{2}$"}}}}
+            ]
+          }
+        },
+        "skill_groups": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["id", "label", "items"],
+            "properties": {
+              "id": {"type": "string", "minLength": 1},
+              "label": {"type": "string", "minLength": 1},
+              "items": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": ["name", "claim_ids"],
+                  "properties": {
+                    "name": {"type": "string", "minLength": 1},
+                    "claim_ids": {
+                      "type": "array",
+                      "minItems": 1,
+                      "items": {"type": "string", "minLength": 1}
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
       }
     }
   }

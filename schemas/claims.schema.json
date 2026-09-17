@@ -1,22 +1,27 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "Elite CV claims document",
+  "title": "Elite CV claims document v2",
   "type": "object",
+  "additionalProperties": false,
   "required": ["schema_version", "claims"],
   "properties": {
-    "schema_version": {"const": 1},
+    "schema_version": {"const": 2},
     "claims": {
       "type": "array",
       "items": {
         "type": "object",
         "required": ["id", "statement", "evidence", "evidence_status", "review_status", "disclosure"],
+        "additionalProperties": false,
         "properties": {
           "id": {"type": "string", "minLength": 1},
           "statement": {"type": "string", "minLength": 1},
-          "evidence": {"type": "array"},
+            "evidence": {"type": "array", "items": {"type": "object", "required": ["source_id", "locator"], "additionalProperties": false, "properties": {"source_id": {"type": "string", "minLength": 1}, "locator": {"type": "string", "pattern": "^(page:[1-9][0-9]{0,3}|line:[1-9][0-9]{0,3}|section:[a-z0-9]+(?:-[a-z0-9]+)*)$", "maxLength": 80}, "excerpt": {"type": ["string", "null"]}}}},
           "evidence_status": {"enum": ["sourced", "self_attested", "externally_verified", "unsupported", "conflicted"]},
           "review_status": {"enum": ["pending", "approved", "rejected"]},
-          "disclosure": {"enum": ["private", "shareable", "restricted"]}
+          "disclosure": {"enum": ["private", "shareable", "restricted"]},
+          "reviewed_by": {"type": ["string", "null"]},
+          "reviewed_at": {"type": ["string", "null"]},
+          "questions": {"type": "array", "items": {"type": "string"}}
         }
       }
     }

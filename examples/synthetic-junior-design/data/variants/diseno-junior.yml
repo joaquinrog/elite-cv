@@ -1,25 +1,29 @@
 schema_version: 2
-id: ai-internship
-target_role: Applied AI Engineering Intern
-locale: en-US
+id: diseno-junior
+target_role: Diseñadora de producto junior
+locale: es-MX
 page_size: letter
 page_target: 1
 sections:
-  - projects
   - experience
+  - projects
   - education
   - skills
 include_entries:
-  - entry.synthetic-ledger
-  - entry.synthetic-vision
-  - entry.synthetic-rover
+  - entry.synthetic-estudio
+  - entry.synthetic-editorial
   - entry.synthetic-education
 exclude_entries: []
 required_claim_ids: []
 allowed_disclosures:
   - shareable
 include_skill_groups:
-  - skills.technical
+  - skills.design
+  - skills.research
+  - skills.tools
+  - skills.languages
 contact_fields:
   - email
+  - phone
+  - location
   - links

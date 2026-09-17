@@ -1,58 +1,58 @@
-schema_version: 1
+schema_version: 2
 claims:
   - id: claim.rover.control
     statement: Built Java control software for a synthetic competition rover.
     evidence:
       - source_id: source.synthetic-portfolio
-        locator: section "Control software"
+        locator: "section:control-software"
         excerpt: null
     evidence_status: sourced
     review_status: approved
     disclosure: shareable
     reviewed_by: synthetic-owner
-    reviewed_at: 2026-01-16
+    reviewed_at: "2026-01-16"
     questions: []
   - id: claim.rover.telemetry
     statement: Added telemetry and field-test notes to the rover control workflow.
     evidence:
       - source_id: source.synthetic-portfolio
-        locator: section "Control software"
+        locator: "section:control-software"
         excerpt: null
     evidence_status: sourced
     review_status: approved
     disclosure: shareable
     reviewed_by: synthetic-owner
-    reviewed_at: 2026-01-16
+    reviewed_at: "2026-01-16"
     questions: []
   - id: claim.vision.odometry
     statement: Implemented camera-based odometry for a warehouse navigation prototype.
     evidence:
       - source_id: source.synthetic-portfolio
-        locator: section "Vision project"
+        locator: "section:vision-project"
         excerpt: null
     evidence_status: self_attested
     review_status: approved
     disclosure: shareable
     reviewed_by: synthetic-owner
-    reviewed_at: 2026-01-16
+    reviewed_at: "2026-01-16"
     questions: []
   - id: claim.ledger.validation
     statement: Created a local validation tool that links draft bullets to reviewed claims.
     evidence:
       - source_id: source.synthetic-review
-        locator: section "Evidence ledger"
+        locator: "section:evidence-ledger"
         excerpt: null
     evidence_status: self_attested
     review_status: approved
     disclosure: shareable
     reviewed_by: synthetic-owner
-    reviewed_at: 2026-01-16
+    reviewed_at: "2026-01-16"
     questions: []
   - id: claim.rover.start-date
     statement: The rover project began in March 2024.
     evidence:
       - source_id: source.synthetic-portfolio
-        locator: section "Deliberately unresolved notes"
+        locator: "section:deliberately-unresolved-notes"
         excerpt: null
     evidence_status: conflicted
     review_status: pending
@@ -75,11 +75,11 @@ claims:
     statement: A private contact value exists in the local profile.
     evidence:
       - source_id: source.synthetic-review
-        locator: owner-only review field
+        locator: "section:owner-only-review-field"
         excerpt: null
     evidence_status: sourced
     review_status: approved
     disclosure: private
     reviewed_by: synthetic-owner
-    reviewed_at: 2026-01-16
+    reviewed_at: "2026-01-16"
     questions: []

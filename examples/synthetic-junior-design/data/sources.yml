@@ -1,0 +1,9 @@
+schema_version: 2
+sources:
+  - id: source.synthetic-design-portfolio
+    type: project-notes
+    label: Notas ficticias de portafolio de diseño
+    path: sources/design-portfolio.md
+    confidentiality: public
+    collected_at: "2026-02-01"
+    fingerprint: null

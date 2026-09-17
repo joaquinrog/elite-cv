@@ -1,10 +1,14 @@
-schema_version: 1
+schema_version: 2
 profile:
   id: profile.synthetic-alex-rivera
   name: Alex Rivera
   headline: Robotics Software Engineer
+  headline_claim_ids:
+    - claim.rover.control
   contact:
     email: alex@example.com
+    phone: null
+    location: null
     links:
       - label: github.com/example
         url: https://github.com/example
@@ -19,6 +23,8 @@ profile:
       start_date: 2024-04
       end_date: 2025-01
       date_precision: month
+      claim_ids:
+        - claim.rover.control
       bullets:
         - id: bullet.synthetic-control
           text: Built Java control software for a competition rover and documented feedback loops.
@@ -38,6 +44,8 @@ profile:
       start_date: 2023-09
       end_date: 2024-03
       date_precision: month
+      claim_ids:
+        - claim.vision.odometry
       bullets:
         - id: bullet.synthetic-odometry
           text: Implemented camera-based odometry for a warehouse navigation prototype.
@@ -52,6 +60,8 @@ profile:
       start_date: 2024-06
       end_date: null
       date_precision: month
+      claim_ids:
+        - claim.ledger.validation
       bullets:
         - id: bullet.synthetic-ledger
           text: Created a local validation tool that links draft bullets to reviewed claims.
@@ -66,10 +76,20 @@ profile:
       start_date: 2022-09
       end_date: 2026-06
       date_precision: month
+      claim_ids:
+        - claim.ledger.validation
       bullets: []
-  skills:
-    - Java
-    - Python
-    - Control systems
-    - Computer vision
-    - Git
+  skill_groups:
+    - id: skills.technical
+      label: Technical skills
+      items:
+        - name: Java
+          claim_ids: [claim.rover.control]
+        - name: Python
+          claim_ids: [claim.ledger.validation]
+        - name: Control systems
+          claim_ids: [claim.rover.control]
+        - name: Computer vision
+          claim_ids: [claim.vision.odometry]
+        - name: Git
+          claim_ids: [claim.ledger.validation]

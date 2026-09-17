@@ -1,16 +1,16 @@
-schema_version: 1
+schema_version: 2
 sources:
   - id: source.synthetic-portfolio
     type: project-notes
     label: Synthetic robotics portfolio notes
     path: sources/robotics-portfolio.md
     confidentiality: public
-    collected_at: 2026-01-15
+    collected_at: "2026-01-15"
     fingerprint: null
   - id: source.synthetic-review
     type: review-record
     label: Synthetic owner review record
     path: sources/robotics-portfolio.md
     confidentiality: public
-    collected_at: 2026-01-16
+    collected_at: "2026-01-16"
     fingerprint: null

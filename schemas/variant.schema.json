@@ -1,19 +1,23 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "Elite CV variant document",
+  "title": "Elite CV variant document v2",
   "type": "object",
-  "required": ["schema_version", "id", "target_role", "sections", "include_entries"],
+  "additionalProperties": false,
+  "required": ["schema_version", "id", "target_role", "sections", "include_entries", "include_skill_groups", "contact_fields"],
   "properties": {
-    "schema_version": {"const": 1},
+    "schema_version": {"const": 2},
     "id": {"type": "string", "minLength": 1},
     "target_role": {"type": "string", "minLength": 1},
-    "locale": {"type": "string"},
+    "locale": {"type": "string", "enum": ["en-US", "es-MX"]},
     "page_size": {"enum": ["letter", "a4"]},
+    "density": {"enum": ["short", "medium", "dense"]},
     "page_target": {"type": "integer", "minimum": 1},
-    "sections": {"type": "array", "items": {"type": "string"}},
-    "include_entries": {"type": "array", "items": {"type": "string"}},
-    "exclude_entries": {"type": "array", "items": {"type": "string"}},
-    "required_claim_ids": {"type": "array", "items": {"type": "string"}},
+    "sections": {"type": "array", "items": {"type": "string", "minLength": 1}},
+    "include_entries": {"type": "array", "items": {"type": "string", "minLength": 1}},
+    "include_skill_groups": {"type": "array", "items": {"type": "string", "minLength": 1}},
+    "contact_fields": {"type": "array", "items": {"enum": ["email", "phone", "location", "links"]}},
+    "exclude_entries": {"type": "array", "items": {"type": "string", "minLength": 1}},
+    "required_claim_ids": {"type": "array", "items": {"type": "string", "minLength": 1}},
     "allowed_disclosures": {"type": "array", "items": {"enum": ["shareable", "restricted", "private"]}}
   }
 }
