@@ -11,7 +11,10 @@ import subprocess
 from typing import Any
 
 from . import __version__
+from .diagnostics import check_dependencies, required_dependency_failures
+from .locale import format_date_range, get_locale
 from .models import WorkspaceDocuments, WorkspaceError, load_workspace
+from .pdf_audit import audit_pdf_text
 from .render import render_latex
 from .report import render_audit_report, render_evidence_report
 from .validate import ValidationResult, format_issues, validate_documents
@@ -161,6 +164,85 @@ def _restrict_private_tree(root: Path) -> None:
         path.chmod(0o700 if path.is_dir() else 0o600)
 
 
+def _protected_pdf_fields(
+    profile: dict[str, Any], variant: dict[str, Any], entries: list[dict[str, Any]],
+) -> dict[str, str]:
+    protected_fields = {"headline": str(profile.get("headline", ""))}
+    for entry in entries:
+        entry_id = str(entry.get("id", "entry"))
+        for field_name in ("role", "title", "organization"):
+            value = entry.get(field_name)
+            if value:
+                protected_fields[f"{entry_id}.{field_name}"] = str(value)
+    groups = {
+        str(group.get("id")): group
+        for group in profile.get("skill_groups", []) or []
+        if isinstance(group, dict)
+    }
+    for group_id in variant.get("include_skill_groups", []) or []:
+        group = groups.get(str(group_id))
+        if not group:
+            continue
+        for index, item in enumerate(group.get("items", []) or []):
+            if isinstance(item, dict) and item.get("name"):
+                protected_fields[f"{group_id}.items[{index}]"] = str(item["name"])
+    return protected_fields
+
+
+def _expected_pdf_fields(
+    profile: dict[str, Any], variant: dict[str, Any], entries: list[dict[str, Any]],
+) -> dict[str, str]:
+    locale = get_locale(str(variant.get("locale", "en-US")))
+    expected = {
+        "name": str(profile.get("name", "")),
+        "headline": str(profile.get("headline", "")),
+    }
+    entries_by_section: dict[str, list[dict[str, Any]]] = {}
+    for entry in entries:
+        entries_by_section.setdefault(str(entry.get("section", "experience")), []).append(entry)
+        entry_id = str(entry.get("id", "entry"))
+        for field_name in ("role", "title", "organization", "location"):
+            value = entry.get(field_name)
+            if value:
+                expected[f"{entry_id}.{field_name}"] = str(value)
+        expected[f"{entry_id}.dates"] = format_date_range(
+            entry.get("start_date"), entry.get("end_date"), locale.code
+        )
+
+    groups = {
+        str(group.get("id")): group
+        for group in profile.get("skill_groups", []) or []
+        if isinstance(group, dict)
+    }
+    for section in variant.get("sections", []) or []:
+        if section == "skills":
+            selected_groups = [
+                groups[group_id]
+                for group_id in variant.get("include_skill_groups", []) or []
+                if group_id in groups
+            ]
+            if selected_groups:
+                expected["section.skills"] = locale.section("skills")
+            for group in selected_groups:
+                group_id = str(group.get("id", "skills"))
+                expected[f"{group_id}.label"] = str(group.get("label", ""))
+                for index, item in enumerate(group.get("items", []) or []):
+                    if isinstance(item, dict) and item.get("name"):
+                        expected[f"{group_id}.items[{index}]"] = str(item["name"])
+        elif entries_by_section.get(str(section)):
+            expected[f"section.{section}"] = locale.section(str(section))
+
+    contact = profile.get("contact", {}) or {}
+    for field_name in variant.get("contact_fields", []) or []:
+        if field_name in {"email", "phone", "location"} and contact.get(field_name):
+            expected[f"contact.{field_name}"] = str(contact[field_name])
+        elif field_name == "links":
+            for index, link in enumerate(contact.get("links", []) or []):
+                if isinstance(link, dict) and (link.get("label") or link.get("url")):
+                    expected[f"contact.links[{index}]"] = str(link.get("label") or link["url"])
+    return {key: value for key, value in expected.items() if value}
+
+
 def build_variant(
     root: Path,
     target: str,
@@ -183,8 +265,15 @@ def build_variant(
         raise BuildError(format_issues(validation.errors))
     if validation.traceability_coverage != 1.0:
         raise BuildError(
-            f"Traceability coverage is {validation.traceability_coverage:.0%}; every rendered bullet needs an eligible claim."
+            f"Bullet traceability coverage is {validation.traceability_coverage:.0%}; every rendered bullet needs an eligible claim."
         )
+
+    dependency_failures = required_dependency_failures(check_dependencies())
+    if dependency_failures:
+        details = "; ".join(
+            f"{check.check_id}: {check.remediation}" for check in dependency_failures
+        )
+        raise BuildError(f"Missing renderer dependencies: {details}")
 
     output_base = (output_dir or (documents.root / "dist")).resolve()
     target_dir = (output_base / target).resolve()
@@ -215,6 +304,20 @@ def build_variant(
     preview_path = share_dir / "preview.png"
     shutil.copy2(build_dir / "preview.png", preview_path)
     page_count = _page_count(pdf_path)
+    extracted_text = extracted_text_path.read_text(encoding="utf-8")
+    profile = documents.profile["profile"]
+    expected_fields = _expected_pdf_fields(
+        profile, documents.variant, validation.selected_entries
+    )
+    protected_fields = _protected_pdf_fields(profile, documents.variant, validation.selected_entries)
+    pdf_text_quality = audit_pdf_text(
+        extracted_text,
+        expected_fields=expected_fields,
+        protected_fields=protected_fields,
+    )
+    if pdf_text_quality["status"] != "pass":
+        codes = ", ".join(str(item["code"]) for item in pdf_text_quality["findings"])
+        raise BuildError(f"PDF text quality audit failed: {codes}")
     expected_pages = documents.variant.get("page_target")
     if isinstance(expected_pages, int) and page_count != expected_pages:
         raise BuildError(
@@ -252,10 +355,26 @@ def build_variant(
         "tools": _tools_used(),
         "page_count": page_count,
         "traceability_coverage": validation.traceability_coverage,
+        "traceability_scope": "selected_bullets",
+        "bullet_traceability": {
+            "coverage": validation.traceability_coverage,
+            "scope": "selected_bullets",
+            "status": "not applicable" if validation.selected_bullet_count == 0 else "measured",
+        },
+        "structured_field_provenance": validation.structured_provenance,
+        "disclosure_checks": validation.disclosure_checks,
+        "pdf_text_quality": pdf_text_quality,
         "checks": {
             "schema": not any(issue.code == "schema_version" for issue in validation.errors),
-            "provenance": validation.traceability_coverage == 1.0,
+            "bullet_traceability": validation.traceability_coverage == 1.0,
+            "structured_field_provenance": all(
+                bool(item.get("eligible")) for item in validation.structured_provenance
+            ),
+            "disclosure": all(
+                bool(item.get("allowed")) for item in validation.disclosure_checks
+            ),
             "pdf_text": extracted_text_path.stat().st_size > 0,
+            "pdf_text_quality": pdf_text_quality["status"],
             "preview": preview_path.is_file(),
         },
     }

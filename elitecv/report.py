@@ -68,6 +68,7 @@ def render_evidence_report(
         )
 
     generated_at = datetime.now(timezone.utc).isoformat()
+    coverage = "not applicable" if validation.selected_bullet_count == 0 else f"{validation.traceability_coverage:.0%}"
     return f"""<!doctype html>
 <html lang="en">
 <head>
@@ -91,13 +92,22 @@ def render_evidence_report(
     <dt>Tool version</dt><dd>{escape(tool_version)}</dd>
     <dt>Build time</dt><dd>{escape(generated_at)}</dd>
     <dt>Page count</dt><dd>{page_count}</dd>
-    <dt>Traceability coverage</dt><dd>{validation.traceability_coverage:.0%}</dd>
+    <dt>Bullet traceability coverage</dt><dd>{coverage}</dd>
   </dl>
   <h2>Rendered bullets</h2>
   {''.join(rows) or '<p>No bullets selected.</p>'}
   <h2>Excluded claims</h2>
   <p>Excluded claims remain in the evidence workspace and cannot enter this release.</p>
   <ul>{''.join(exclusions) or '<li>None</li>'}</ul>
+  <h2>Structured-field provenance</h2>
+  <ul>{''.join('<li><code>' + escape(str(item.get('path', ''))) + '</code>: '
+               + escape(', '.join(str(claim_id) for claim_id in item.get('claim_ids', [])))
+               + ' / eligible: ' + escape(str(item.get('eligible', False))) + '</li>'
+               for item in validation.structured_provenance) or '<li>None</li>'}</ul>
+  <h2>Disclosure checks</h2>
+  <ul>{''.join('<li><code>' + escape(str(item.get('field', ''))) + '</code>: '
+               + escape(str(item.get('allowed', False))) + '</li>'
+               for item in validation.disclosure_checks) or '<li>None</li>'}</ul>
 </body>
 </html>
 """
@@ -110,15 +120,27 @@ def render_audit_report(
     page_count: int,
     extracted_text_path: str,
 ) -> str:
-    status = "PASS" if validation.is_valid and validation.traceability_coverage == 1.0 else "BLOCKED"
+    status = "PASS" if validation.is_valid else "BLOCKED"
     warnings = "\n".join(f"- `{issue.code}`: {issue.message}" for issue in validation.warnings) or "- None"
     errors = "\n".join(f"- `{issue.code}`: {issue.message}" for issue in validation.errors) or "- None"
+    coverage = "not applicable" if validation.selected_bullet_count == 0 else f"{validation.traceability_coverage:.0%}"
     return f"""# Elite CV Builder by joaq audit report
 
 - Status: **{status}**
 - Variant: `{documents.variant.get('id', '')}`
 - Page count: `{page_count}`
-- Traceability coverage: `{validation.traceability_coverage:.0%}`
+## Bullet traceability
+
+- Coverage: `{coverage}`
+- Scope: `selected_bullets`
+
+## Structured-field provenance
+
+{chr(10).join(f"- `{item.get('path', '')}`: {', '.join(str(claim_id) for claim_id in item.get('claim_ids', [])) or 'none'}; eligible={item.get('eligible', False)}" for item in validation.structured_provenance) or '- None'}
+
+## Disclosure checks
+
+{chr(10).join(f"- `{item.get('field', '')}`: allowed={item.get('allowed', False)}" for item in validation.disclosure_checks) or '- None'}
 - Extracted text: `{extracted_text_path}`
 
 ## Blocking findings

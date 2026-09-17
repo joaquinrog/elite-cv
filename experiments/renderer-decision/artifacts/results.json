@@ -1,0 +1,464 @@
+{
+  "experiment": "wave-5a",
+  "synthetic_only": true,
+  "criteria": {
+    "max_artifact_bytes": 314572800,
+    "max_elapsed_seconds": 600
+  },
+  "environment": {
+    "platform": "Linux-6.17.0-40-generic-x86_64-with-glibc2.39",
+    "python": "3.12.3"
+  },
+  "candidates": {
+    "current-tex-poppler": {
+      "availability": {
+        "available": true,
+        "version": "elitecv current renderer",
+        "error": null
+      },
+      "runs": [
+        {
+          "candidate": "current-tex-poppler",
+          "fixture": "short",
+          "status": "pass",
+          "elapsed_seconds": 1.133,
+          "artifact_sizes_bytes": {
+            "cv.pdf": 97364,
+            "preview.png": 77285,
+            "cv.txt": 569
+          },
+          "page_count": 1,
+          "text_quality": {
+            "status": "pass",
+            "findings": []
+          },
+          "expected_text": [
+            "Lucía Nava",
+            "Diseñadora visual junior"
+          ],
+          "target_role_absent": true,
+          "links": [
+            {
+              "url": "https://behance.net/lucia-nava",
+              "status": "found"
+            },
+            {
+              "url": "https://lucianava.example.com",
+              "status": "found"
+            }
+          ],
+          "preview": {
+            "available": true,
+            "size_bytes": 77285
+          },
+          "paths": {
+            "pdf": "cv.pdf",
+            "preview": "preview.png",
+            "text": "cv.txt"
+          },
+          "error": null,
+          "repeatability": {
+            "comparable": true,
+            "identical": false
+          }
+        },
+        {
+          "candidate": "current-tex-poppler",
+          "fixture": "medium",
+          "status": "pass",
+          "elapsed_seconds": 1.1292,
+          "artifact_sizes_bytes": {
+            "cv.pdf": 100461,
+            "preview.png": 102745,
+            "cv.txt": 807
+          },
+          "page_count": 1,
+          "text_quality": {
+            "status": "pass",
+            "findings": []
+          },
+          "expected_text": [
+            "Lucía Nava",
+            "Diseñadora visual junior"
+          ],
+          "target_role_absent": true,
+          "links": [
+            {
+              "url": "https://behance.net/lucia-nava",
+              "status": "found"
+            },
+            {
+              "url": "https://lucianava.example.com",
+              "status": "found"
+            }
+          ],
+          "preview": {
+            "available": true,
+            "size_bytes": 102745
+          },
+          "paths": {
+            "pdf": "cv.pdf",
+            "preview": "preview.png",
+            "text": "cv.txt"
+          },
+          "error": null,
+          "repeatability": {
+            "comparable": true,
+            "identical": false
+          }
+        },
+        {
+          "candidate": "current-tex-poppler",
+          "fixture": "dense",
+          "status": "pass",
+          "elapsed_seconds": 1.3429,
+          "artifact_sizes_bytes": {
+            "cv.pdf": 102366,
+            "preview.png": 129323,
+            "cv.txt": 1033
+          },
+          "page_count": 1,
+          "text_quality": {
+            "status": "pass",
+            "findings": []
+          },
+          "expected_text": [
+            "Lucía Nava",
+            "Diseñadora visual junior"
+          ],
+          "target_role_absent": true,
+          "links": [
+            {
+              "url": "https://behance.net/lucia-nava",
+              "status": "found"
+            },
+            {
+              "url": "https://lucianava.example.com",
+              "status": "found"
+            }
+          ],
+          "preview": {
+            "available": true,
+            "size_bytes": 129323
+          },
+          "paths": {
+            "pdf": "cv.pdf",
+            "preview": "preview.png",
+            "text": "cv.txt"
+          },
+          "error": null,
+          "repeatability": {
+            "comparable": true,
+            "identical": false
+          }
+        }
+      ]
+    },
+    "tectonic": {
+      "availability": {
+        "available": false,
+        "version": null,
+        "error": "missing_tool"
+      },
+      "runs": [
+        {
+          "candidate": "tectonic",
+          "fixture": "short",
+          "status": "blocked",
+          "elapsed_seconds": 0,
+          "artifact_sizes_bytes": {},
+          "page_count": null,
+          "text_quality": {
+            "status": "fail",
+            "findings": [
+              {
+                "code": "text_too_short"
+              },
+              {
+                "code": "expected_text_missing"
+              }
+            ]
+          },
+          "expected_text": [
+            "Lucía Nava",
+            "Diseñadora visual junior"
+          ],
+          "target_role_absent": true,
+          "links": [
+            {
+              "url": "https://behance.net/lucia-nava",
+              "status": "not_measured"
+            },
+            {
+              "url": "https://lucianava.example.com",
+              "status": "not_measured"
+            }
+          ],
+          "preview": {
+            "available": false,
+            "size_bytes": 0
+          },
+          "paths": {
+            "pdf": "missing.pdf",
+            "preview": "missing.png",
+            "text": "missing.txt"
+          },
+          "error": "missing_tool",
+          "repeatability": {
+            "comparable": false,
+            "identical": false
+          }
+        },
+        {
+          "candidate": "tectonic",
+          "fixture": "medium",
+          "status": "blocked",
+          "elapsed_seconds": 0,
+          "artifact_sizes_bytes": {},
+          "page_count": null,
+          "text_quality": {
+            "status": "fail",
+            "findings": [
+              {
+                "code": "text_too_short"
+              },
+              {
+                "code": "expected_text_missing"
+              }
+            ]
+          },
+          "expected_text": [
+            "Lucía Nava",
+            "Diseñadora visual junior"
+          ],
+          "target_role_absent": true,
+          "links": [
+            {
+              "url": "https://behance.net/lucia-nava",
+              "status": "not_measured"
+            },
+            {
+              "url": "https://lucianava.example.com",
+              "status": "not_measured"
+            }
+          ],
+          "preview": {
+            "available": false,
+            "size_bytes": 0
+          },
+          "paths": {
+            "pdf": "missing.pdf",
+            "preview": "missing.png",
+            "text": "missing.txt"
+          },
+          "error": "missing_tool",
+          "repeatability": {
+            "comparable": false,
+            "identical": false
+          }
+        },
+        {
+          "candidate": "tectonic",
+          "fixture": "dense",
+          "status": "blocked",
+          "elapsed_seconds": 0,
+          "artifact_sizes_bytes": {},
+          "page_count": null,
+          "text_quality": {
+            "status": "fail",
+            "findings": [
+              {
+                "code": "text_too_short"
+              },
+              {
+                "code": "expected_text_missing"
+              }
+            ]
+          },
+          "expected_text": [
+            "Lucía Nava",
+            "Diseñadora visual junior"
+          ],
+          "target_role_absent": true,
+          "links": [
+            {
+              "url": "https://behance.net/lucia-nava",
+              "status": "not_measured"
+            },
+            {
+              "url": "https://lucianava.example.com",
+              "status": "not_measured"
+            }
+          ],
+          "preview": {
+            "available": false,
+            "size_bytes": 0
+          },
+          "paths": {
+            "pdf": "missing.pdf",
+            "preview": "missing.png",
+            "text": "missing.txt"
+          },
+          "error": "missing_tool",
+          "repeatability": {
+            "comparable": false,
+            "identical": false
+          }
+        }
+      ]
+    },
+    "typst": {
+      "availability": {
+        "available": false,
+        "version": null,
+        "error": "missing_tool"
+      },
+      "runs": [
+        {
+          "candidate": "typst",
+          "fixture": "short",
+          "status": "blocked",
+          "elapsed_seconds": 0,
+          "artifact_sizes_bytes": {},
+          "page_count": null,
+          "text_quality": {
+            "status": "fail",
+            "findings": [
+              {
+                "code": "text_too_short"
+              },
+              {
+                "code": "expected_text_missing"
+              }
+            ]
+          },
+          "expected_text": [
+            "Lucía Nava",
+            "Diseñadora visual junior"
+          ],
+          "target_role_absent": true,
+          "links": [
+            {
+              "url": "https://behance.net/lucia-nava",
+              "status": "not_measured"
+            },
+            {
+              "url": "https://lucianava.example.com",
+              "status": "not_measured"
+            }
+          ],
+          "preview": {
+            "available": false,
+            "size_bytes": 0
+          },
+          "paths": {
+            "pdf": "missing.pdf",
+            "preview": "missing.png",
+            "text": "missing.txt"
+          },
+          "error": "missing_tool",
+          "repeatability": {
+            "comparable": false,
+            "identical": false
+          }
+        },
+        {
+          "candidate": "typst",
+          "fixture": "medium",
+          "status": "blocked",
+          "elapsed_seconds": 0,
+          "artifact_sizes_bytes": {},
+          "page_count": null,
+          "text_quality": {
+            "status": "fail",
+            "findings": [
+              {
+                "code": "text_too_short"
+              },
+              {
+                "code": "expected_text_missing"
+              }
+            ]
+          },
+          "expected_text": [
+            "Lucía Nava",
+            "Diseñadora visual junior"
+          ],
+          "target_role_absent": true,
+          "links": [
+            {
+              "url": "https://behance.net/lucia-nava",
+              "status": "not_measured"
+            },
+            {
+              "url": "https://lucianava.example.com",
+              "status": "not_measured"
+            }
+          ],
+          "preview": {
+            "available": false,
+            "size_bytes": 0
+          },
+          "paths": {
+            "pdf": "missing.pdf",
+            "preview": "missing.png",
+            "text": "missing.txt"
+          },
+          "error": "missing_tool",
+          "repeatability": {
+            "comparable": false,
+            "identical": false
+          }
+        },
+        {
+          "candidate": "typst",
+          "fixture": "dense",
+          "status": "blocked",
+          "elapsed_seconds": 0,
+          "artifact_sizes_bytes": {},
+          "page_count": null,
+          "text_quality": {
+            "status": "fail",
+            "findings": [
+              {
+                "code": "text_too_short"
+              },
+              {
+                "code": "expected_text_missing"
+              }
+            ]
+          },
+          "expected_text": [
+            "Lucía Nava",
+            "Diseñadora visual junior"
+          ],
+          "target_role_absent": true,
+          "links": [
+            {
+              "url": "https://behance.net/lucia-nava",
+              "status": "not_measured"
+            },
+            {
+              "url": "https://lucianava.example.com",
+              "status": "not_measured"
+            }
+          ],
+          "preview": {
+            "available": false,
+            "size_bytes": 0
+          },
+          "paths": {
+            "pdf": "missing.pdf",
+            "preview": "missing.png",
+            "text": "missing.txt"
+          },
+          "error": "missing_tool",
+          "repeatability": {
+            "comparable": false,
+            "identical": false
+          }
+        }
+      ]
+    }
+  }
+}

@@ -9,6 +9,7 @@ import yaml
 
 from elitecv.build import BuildError, _run, build_variant
 from elitecv.cli import main
+from elitecv.diagnostics import DependencyCheck
 
 
 SAMPLE_ROOT = Path(__file__).parents[2] / "examples" / "synthetic-profile"
@@ -30,8 +31,9 @@ def test_synthetic_variant_build_produces_share_and_private_outputs(tmp_path):
     assert result.audit_report_path.is_file()
     assert result.manifest_path.is_file()
     extracted_text = result.extracted_text_path.read_text(encoding="utf-8")
-    assert "Robotics Software Intern" in extracted_text
-    assert "2024-04 - 2025-01" in extracted_text
+    assert "Robotics Software Intern" not in extracted_text
+    assert "Robotics Software Engineer" in extracted_text
+    assert "April 2024 - January 2025" in extracted_text
     report = result.evidence_report_path.read_text(encoding="utf-8")
     assert "35 percent faster" not in report
     assert "raw source excerpts" in report
@@ -85,3 +87,39 @@ def test_tool_timeout_is_reported_as_a_build_error(monkeypatch, tmp_path):
 
     with pytest.raises(BuildError, match="timed out"):
         _run(["pdflatex"], cwd=tmp_path)
+
+
+def test_build_uses_the_dependency_contract_before_rendering(monkeypatch, tmp_path):
+    monkeypatch.setattr(
+        "elitecv.build.check_dependencies",
+        lambda: [
+            DependencyCheck(
+                check_id="renderer.tool.pdflatex",
+                status="missing",
+                category="required",
+                remediation="Install pdflatex.",
+                required=True,
+            )
+        ],
+    )
+
+    with pytest.raises(BuildError, match="renderer.tool.pdflatex"):
+        build_variant(SAMPLE_ROOT, "robotics-software", output_dir=tmp_path)
+
+
+@pytest.mark.skipif(
+    any(shutil.which(tool) is None for tool in REQUIRED_TOOLS),
+    reason="local PDF toolchain is not installed",
+)
+def test_build_blocks_when_expected_pdf_text_is_missing_without_leaking_values(monkeypatch, tmp_path):
+    monkeypatch.setattr(
+        "elitecv.build.audit_pdf_text",
+        lambda *_args, **_kwargs: {
+            "status": "fail",
+            "findings": [{"code": "expected_text_missing"}],
+        },
+    )
+
+    with pytest.raises(BuildError, match="PDF text quality audit failed: expected_text_missing") as error:
+        build_variant(SAMPLE_ROOT, "robotics-software", output_dir=tmp_path)
+    assert "Synthetic Robotics Lab" not in str(error.value)

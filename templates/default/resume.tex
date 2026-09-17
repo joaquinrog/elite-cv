@@ -3,21 +3,24 @@
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{lmodern}
+{{DENSITY}}
 \usepackage[margin=0.55in]{geometry}
 \usepackage[hidelinks]{hyperref}
 \usepackage{enumitem}
 
+\geometry{margin=\CVMargin}
 \pagestyle{empty}
 \setlength{\parindent}{0pt}
-\setlist[itemize]{leftmargin=*, topsep=1pt, itemsep=1pt, parsep=0pt}
+\renewcommand{\familydefault}{\sfdefault}
+\renewcommand{\baselinestretch}{\CVLeading}
+\setlist[itemize]{leftmargin=1.2em, topsep=\CVSectionAfter, itemsep=\CVItemSep, parsep=0pt}
+\newcommand{\cvsection}[1]{\vspace{\CVSectionBefore}\section*{#1}\vspace{-\CVSectionAfter}}
 
 \begin{document}
 
-\begin{center}
-{\LARGE \textbf{ {{NAME}} }}\\
-{{HEADLINE}}\\
-{{CONTACT}}
-\end{center}
+{\Huge\bfseries {{NAME}}}\\[1pt]
+{\large {{HEADLINE}}}\\[2pt]
+{\small {{CONTACT}}}
 
 {{SECTIONS}}
 
