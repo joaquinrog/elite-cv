@@ -5,7 +5,7 @@ from elitecv.validate import validate_documents
 
 def _documents(*, claim_status="sourced", review_status="approved", disclosure="shareable"):
     sources = {
-        "schema_version": 1,
+        "schema_version": 2,
         "sources": [
             {
                 "id": "source.synthetic-notes",
@@ -19,7 +19,7 @@ def _documents(*, claim_status="sourced", review_status="approved", disclosure="
         ],
     }
     claims = {
-        "schema_version": 1,
+        "schema_version": 2,
         "claims": [
             {
                 "id": "claim.rover.control",
@@ -27,7 +27,7 @@ def _documents(*, claim_status="sourced", review_status="approved", disclosure="
                 "evidence": [
                     {
                         "source_id": "source.synthetic-notes",
-                        "locator": "Control section",
+                        "locator": "section:control",
                         "excerpt": None,
                     }
                 ],
@@ -41,12 +41,13 @@ def _documents(*, claim_status="sourced", review_status="approved", disclosure="
         ],
     }
     profile = {
-        "schema_version": 1,
+        "schema_version": 2,
         "profile": {
             "id": "profile.synthetic",
             "name": "Alex Rivera",
             "headline": "Robotics Software Engineer",
-            "contact": {"email": "alex@example.com", "links": []},
+            "headline_claim_ids": ["claim.rover.control"],
+            "contact": {"email": "alex@example.com", "phone": None, "location": None, "links": []},
             "entries": [
                 {
                     "id": "entry.rover",
@@ -57,6 +58,7 @@ def _documents(*, claim_status="sourced", review_status="approved", disclosure="
                     "start_date": "2024-01",
                     "end_date": None,
                     "date_precision": "month",
+                    "claim_ids": ["claim.rover.control"],
                     "bullets": [
                         {
                             "id": "bullet.rover.control",
@@ -67,11 +69,17 @@ def _documents(*, claim_status="sourced", review_status="approved", disclosure="
                     ],
                 }
             ],
-            "skills": ["Python", "Control systems"],
+            "skill_groups": [
+                {
+                    "id": "skills.technical",
+                    "label": "Technical skills",
+                    "items": [{"name": "Control systems", "claim_ids": ["claim.rover.control"]}],
+                }
+            ],
         },
     }
     variant = {
-        "schema_version": 1,
+        "schema_version": 2,
         "id": "robotics-software",
         "target_role": "Robotics Software Intern",
         "locale": "en-US",
@@ -82,6 +90,8 @@ def _documents(*, claim_status="sourced", review_status="approved", disclosure="
         "exclude_entries": [],
         "required_claim_ids": [],
         "allowed_disclosures": ["shareable"],
+        "include_skill_groups": ["skills.technical"],
+        "contact_fields": ["email"],
     }
     return sources, claims, profile, variant
 
@@ -181,3 +191,65 @@ def test_variant_required_claim_must_exist():
     result = validate_documents(*documents, strict=True)
 
     assert any(issue.code == "required_claim_missing" for issue in result.errors)
+
+
+def test_zero_selected_bullets_keep_numeric_coverage_compatibility():
+    sources, claims, profile, variant = _documents()
+    profile["profile"]["entries"][0]["bullets"] = []
+
+    result = validate_documents(sources, claims, profile, variant, strict=True)
+
+    assert result.traceability_coverage == 1.0
+    assert result.selected_bullet_count == 0
+
+
+def test_structured_provenance_and_disclosure_results_are_separate():
+    result = validate_documents(*_documents(), strict=True)
+
+    assert result.structured_provenance
+    assert all({"path", "claim_ids", "eligible"} <= item.keys() for item in result.structured_provenance)
+    assert result.disclosure_checks == [{"field": "email", "allowed": True}]
+
+
+@pytest.mark.parametrize("field", ["headline_claim_ids", "claim_ids"])
+def test_visible_structured_fields_require_eligible_claims(field):
+    sources, claims, profile, variant = _documents(claim_status="unsupported", review_status="pending")
+    if field == "headline_claim_ids":
+        profile["profile"][field] = ["claim.rover.control"]
+    else:
+        profile["profile"]["entries"][0][field] = ["claim.rover.control"]
+
+    result = validate_documents(sources, claims, profile, variant, strict=True)
+
+    assert not result.is_valid
+    assert any(issue.code == "structured_claim_not_release_eligible" for issue in result.errors)
+
+
+def test_selected_skill_groups_and_items_require_existing_eligible_claims():
+    sources, claims, profile, variant = _documents()
+    variant["include_skill_groups"] = ["skills.missing"]
+    result = validate_documents(sources, claims, profile, variant, strict=True)
+    assert any(issue.code == "missing_skill_group" for issue in result.errors)
+
+    variant["include_skill_groups"] = ["skills.technical"]
+    profile["profile"]["skill_groups"][0]["items"][0]["claim_ids"] = []
+    result = validate_documents(sources, claims, profile, variant, strict=True)
+    assert any(issue.code == "skill_without_claim" for issue in result.errors)
+
+
+def test_contact_fields_are_an_explicit_allowlist():
+    sources, claims, profile, variant = _documents()
+    variant["contact_fields"] = ["email", "fax"]
+
+    result = validate_documents(sources, claims, profile, variant, strict=True)
+
+    assert any(issue.code == "invalid_contact_field" for issue in result.errors)
+
+
+def test_runtime_rejects_free_form_evidence_locators():
+    sources, claims, profile, variant = _documents()
+    claims["claims"][0]["evidence"][0]["locator"] = "private sentence from source"
+
+    result = validate_documents(sources, claims, profile, variant, strict=True)
+
+    assert any(issue.code == "invalid_locator" for issue in result.errors)
