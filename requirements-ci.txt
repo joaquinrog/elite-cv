@@ -1,5 +1,5 @@
 # Exact CI inputs. Update only through a reviewed dependency update.
 PyYAML==6.0.3
 jsonschema==4.26.0
-pytest==9.1.1
+pytest==9.2.0
 setuptools==84.0.0
